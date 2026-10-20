@@ -1,0 +1,5169 @@
+workspace
+├── src/
+│   ├── hooks/
+│   │   └── useLocalTime.ts
+│   ├── data/
+│   │   └── posts.ts
+│   ├── components/
+│   │   ├── TextRoll.tsx
+│   │   ├── Testimonials.tsx
+│   │   ├── ShaderBackdrop.tsx
+│   │   ├── Services.tsx
+│   │   ├── SectionBadge.tsx
+│   │   ├── ScrollProgress.tsx
+│   │   ├── Reveal.tsx
+│   │   ├── Process.tsx
+│   │   ├── PartnerIcon.tsx
+│   │   ├── Parallax.tsx
+│   │   ├── Navbar.tsx
+│   │   ├── LazyVideo.tsx
+│   │   ├── Journal.tsx
+│   │   ├── Hero.tsx
+│   │   ├── Footer.tsx
+│   │   ├── Contact.tsx
+│   │   ├── CaseStudies.tsx
+│   │   ├── Article.tsx
+│   │   └── About.tsx
+│   ├── vite-env.d.ts
+│   ├── main.tsx
+│   ├── index.css
+│   └── App.tsx
+├── public/
+│   ├── favicon.svg
+│   └── cidev.png
+├── .monkeycode-tmp-files/
+│   ├── 8a2e09bf-long-input-20261017-042935.txt
+│   └── 5e0689f3-cidev_escuro-1.png
+├── vite.config.ts
+├── tsconfig.json
+├── tailwind.config.js
+├── projeto.txt
+├── postcss.config.js
+├── package.json
+├── package-lock.json
+├── index.html
+└── AGENTS.md
+
+================================================================================
+
+--- FILE: index.html ---
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#EFEFEF" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta
+      name="description"
+      content="A Vetor é uma agência de publicidade e propaganda que une ideação, criação e mídia para marcas que querem ser lembradas e escolhidas."
+    />
+    <title>Vetor Agência — Publicidade e Propaganda</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
+
+--- FILE: AGENTS.md ---
+# Vetor Agência — site one-page (PT-BR)
+Stack: React 18 + TS + Vite + Tailwind 3.4 (config padrão), shaders, lucide-react. Sem novas dependências.
+Estrutura: src/App.tsx (ordem das seções) · src/components/{Navbar,Hero,About,CaseStudies,TextRoll,SectionBadge,ShaderBackdrop,PartnerIcon}.tsx · src/hooks/
+Tokens: laranja #F26522 (hover #e05a1a); fundos #EFEFEF, #F5F5F5, branco, gray-900; texto secundário gray-600; container "mx-auto w-full max-w-[1440px]"; padding "px-5 sm:px-8 lg:px-12"; seção "pt-16 sm:pt-20 lg:pt-28 pb-16 sm:pb-20 lg:pb-28"; cards rounded-2xl; botões rounded-full; transição "duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)]".
+Tipografia: fonte do sistema. h2 grande: "text-[clamp(1.75rem,7vw,4.2rem)] sm:text-[clamp(2.5rem,5vw,4.2rem)] font-medium leading-[1.08] tracking-[-0.03em]". h2 editorial: "text-[clamp(1.5rem,4vw,3.2rem)] font-medium leading-[1.12] tracking-[-0.02em]". Corpo 13–17px.
+Padrões: botão laranja = group + <TextRoll> + círculo branco (w-7 h-7 sm:w-8 sm:h-8) com ArrowRight group-hover:-rotate-45. Seção = <section id> + container + <SectionBadge number label />. Reveal variants: up|fade|scale|left|right|blur; Parallax e ScrollProgress em src/components.
+Regras: todo texto em PT-BR; marca "Vetor Agência", logo "VT"; mobile-first; reutilizar componentes; editar só o necessário; não rodar build/dev salvo se pedido; resposta final em 1 linha "Arquivos modificados: ...".
+Blog: posts em src/data/posts.ts; artigo via rota por hash #/blog/<slug> (Article.tsx).
+CTA principal: 'Iniciar um projeto' (#connect). Privacidade: #/privacidade (PRIVACY em src/data/posts.ts). Form: VITE_FORM_ENDPOINT (fallback mailto). WhatsApp: const WHATSAPP em Contact.tsx.
+
+
+--- FILE: projeto.txt ---
+
+
+--- FILE: vite.config.ts ---
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+export default defineConfig({
+  plugins: [react()],
+  server: {
+    host: '0.0.0.0',
+    allowedHosts: ['.monkeycode-ai.live'],
+  },
+})
+
+
+--- FILE: tailwind.config.js ---
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}
+
+
+--- FILE: postcss.config.js ---
+export default {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+}
+
+
+--- FILE: tsconfig.json ---
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["src", "vite.config.ts"]
+}
+
+
+--- FILE: package.json ---
+{
+  "name": "vetor-agencia",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "lucide-react": "^0.468.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "shaders": "^4.0.4"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.11"
+  }
+}
+
+
+--- FILE: package-lock.json ---
+{
+  "name": "vetor-agencia",
+  "version": "0.1.0",
+  "lockfileVersion": 3,
+  "requires": true,
+  "packages": {
+    "": {
+      "name": "vetor-agencia",
+      "version": "0.1.0",
+      "dependencies": {
+        "lucide-react": "^0.468.0",
+        "react": "^18.3.1",
+        "react-dom": "^18.3.1",
+        "shaders": "^4.0.4"
+      },
+      "devDependencies": {
+        "@types/react": "^18.3.12",
+        "@types/react-dom": "^18.3.1",
+        "@vitejs/plugin-react": "^4.3.4",
+        "autoprefixer": "^10.4.20",
+        "postcss": "^8.4.49",
+        "tailwindcss": "^3.4.17",
+        "typescript": "^5.6.3",
+        "vite": "^5.4.11"
+      }
+    },
+    "node_modules/@alloc/quick-lru": {
+      "version": "5.3.0",
+      "resolved": "https://registry.npmjs.org/@alloc/quick-lru/-/quick-lru-5.3.0.tgz",
+      "integrity": "sha512-U4+70Pc5ZS9osnCBCE5Jha/ciHM+Yp+CNMNC/7HvYbNRk1Ldd+f7qO65W5qfhu/TCv+/ozljlXXe9Nj8419DMA==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=10"
+      },
+      "funding": {
+        "url": "https://github.com/sponsors/sindresorhus"
+      }
+    },
+    "node_modules/@babel/code-frame": {
+      "version": "7.29.7",
+      "resolved": "https://registry.npmjs.org/@babel/code-frame/-/code-frame-7.29.7.tgz",
+      "integrity": "sha512-Aup7aUOfpbAUg2ROOJN6Iw5f9DMBlzu0mIkm/malLQFN/YQgO48wCj0Kxa3sEHJvPVFg7siR+qRInwXd2qhQKw==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/helper-validator-identifier": "^7.29.7",
+        "js-tokens": "^4.0.0",
+        "picocolors": "^1.1.1"
+      },
+      "engines": {
+        "node": ">=6.9.0"
+      }
+    },
+    "node_modules/@babel/compat-data": {
+      "version": "7.29.7",
+      "resolved": "https://registry.npmjs.org/@babel/compat-data/-/compat-data-7.29.7.tgz",
+      "integrity": "sha512-locTkQyKvwIEgBzVrn8693ebc97F2U8ZHjbXwDXJ5Fn2TCpNwTlKcaKLkdHop5c/icOFE7qt7Q9JC5hnKNa6Gg==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=6.9.0"
+      }
+    },
+    "node_modules/@babel/core": {
+      "version": "7.29.7",
+      "resolved": "https://registry.npmjs.org/@babel/core/-/core-7.29.7.tgz",
+      "integrity": "sha512-RgHBCvtjbOK2gXSNBNIkNoEc9qoVEtau3hj8gEqKQuL3HZAibKarWFEI3Lfm6EYKkLalOh8eSrj9b+ch9H/VBA==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/code-frame": "^7.29.7",
+        "@babel/generator": "^7.29.7",
+        "@babel/helper-compilation-targets": "^7.29.7",
+        "@babel/helper-module-transforms": "^7.29.7",
+        "@babel/helpers": "^7.29.7",
+        "@babel/parser": "^7.29.7",
+        "@babel/template": "^7.29.7",
+        "@babel/traverse": "^7.29.7",
+        "@babel/types": "^7.29.7",
+        "@jridgewell/remapping": "^2.3.5",
+        "convert-source-map": "^2.0.0",
+        "debug": "^4.1.0",
+        "gensync": "^1.0.0-beta.2",
+        "json5": "^2.2.3",
+        "semver": "^6.3.1"
+      },
+      "engines": {
+        "node": ">=6.9.0"
+      },
+      "funding": {
+        "type": "opencollective",
+        "url": "https://opencollective.com/babel"
+      }
+    },
+    "node_modules/@babel/generator": {
+      "version": "7.29.8",
+      "resolved": "https://registry.npmjs.org/@babel/generator/-/generator-7.29.8.tgz",
+      "integrity": "sha512-gZbepsdh3WDtgZKWL+vTPh71LSBrm/Y4/QDZBVCcYfmeTEEuoOYwlSy+G1StfJg+/Zy550u/3TATbm7qDbbMtg==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/parser": "^7.29.8",
+        "@babel/types": "^7.29.8",
+        "@jridgewell/gen-mapping": "^0.3.12",
+        "@jridgewell/trace-mapping": "^0.3.28",
+        "jsesc": "^3.0.2"
+      },
+      "engines": {
+        "node": ">=6.9.0"
+      }
+    },
+    "node_modules/@babel/helper-compilation-targets": {
+      "version": "7.29.7",
+      "resolved": "https://registry.npmjs.org/@babel/helper-compilation-targets/-/helper-compilation-targets-7.29.7.tgz",
+      "integrity": "sha512-wem6WaBj4NaVYVdNhLPPVacES6ZJ+KBBfSkTMD3YZxbP3rm3Di85tJU5ljaUNhaOynt+Aj0xruhYuzQBt8n71g==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/compat-data": "^7.29.7",
+        "@babel/helper-validator-option": "^7.29.7",
+        "browserslist": "^4.24.0",
+        "lru-cache": "^5.1.1",
+        "semver": "^6.3.1"
+      },
+      "engines": {
+        "node": ">=6.9.0"
+      }
+    },
+    "node_modules/@babel/helper-globals": {
+      "version": "7.29.7",
+      "resolved": "https://registry.npmjs.org/@babel/helper-globals/-/helper-globals-7.29.7.tgz",
+      "integrity": "sha512-3nQVUAtvkKH9zahfWgw96Jc/uFOmjACE1kQz82E2lqWmHBgjzbNlsC22nuQTfahmWeQtTq5nQ/4Nnd2A1wj4zA==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=6.9.0"
+      }
+    },
+    "node_modules/@babel/helper-module-imports": {
+      "version": "7.29.7",
+      "resolved": "https://registry.npmjs.org/@babel/helper-module-imports/-/helper-module-imports-7.29.7.tgz",
+      "integrity": "sha512-ejHwrQQYcm9xnTivShn2IDOlIzInN34AXskvq9QicvCtEzq1Vzclu/tKF8Jq1Cg8JG2GL6/EmjgsCT7lXepE3g==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/traverse": "^7.29.7",
+        "@babel/types": "^7.29.7"
+      },
+      "engines": {
+        "node": ">=6.9.0"
+      }
+    },
+    "node_modules/@babel/helper-module-transforms": {
+      "version": "7.29.7",
+      "resolved": "https://registry.npmjs.org/@babel/helper-module-transforms/-/helper-module-transforms-7.29.7.tgz",
+      "integrity": "sha512-UPUVSyXbOh627KiCIGQSgwWzGeBKLkaJ9PJEdrngIwMSzxLR4jS4+f1f1jb7VzBbg8nFLaYotvVPFCTqdrmTAg==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/helper-module-imports": "^7.29.7",
+        "@babel/helper-validator-identifier": "^7.29.7",
+        "@babel/traverse": "^7.29.7"
+      },
+      "engines": {
+        "node": ">=6.9.0"
+      },
+      "peerDependencies": {
+        "@babel/core": "^7.0.0"
+      }
+    },
+    "node_modules/@babel/helper-plugin-utils": {
+      "version": "7.29.7",
+      "resolved": "https://registry.npmjs.org/@babel/helper-plugin-utils/-/helper-plugin-utils-7.29.7.tgz",
+      "integrity": "sha512-G7sHYigPY17oO5SYWnfD/0MTBwVR781S/JI643e/JhUYgVgWE/61SoW3NH9KWUKyKq5LVh3npif99Wkt6j86Jw==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=6.9.0"
+      }
+    },
+    "node_modules/@babel/helper-string-parser": {
+      "version": "7.29.7",
+      "resolved": "https://registry.npmjs.org/@babel/helper-string-parser/-/helper-string-parser-7.29.7.tgz",
+      "integrity": "sha512-Pb5ijPrZ89GDH8223L4UP8i6QApWxs04RbPQJTeWDV0/keR2E36MeKnyr6LYmUUvqRRI+Iv87SuF1W6ErINzYw==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=6.9.0"
+      }
+    },
+    "node_modules/@babel/helper-validator-identifier": {
+      "version": "7.29.7",
+      "resolved": "https://registry.npmjs.org/@babel/helper-validator-identifier/-/helper-validator-identifier-7.29.7.tgz",
+      "integrity": "sha512-qehxGkRj55h/ff8EMaJ+cYhyaKlHIxqYDn682wQD7RNp9UujOQsHog2uS0r2vzr4pW+sXf90NeeayjcNaX3fFg==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=6.9.0"
+      }
+    },
+    "node_modules/@babel/helper-validator-option": {
+      "version": "7.29.7",
+      "resolved": "https://registry.npmjs.org/@babel/helper-validator-option/-/helper-validator-option-7.29.7.tgz",
+      "integrity": "sha512-N9ZErrD+yW5geCDtBqnOoxmR8+tNKiGuxKlDpuJxfsqpa2dFcexaziGAE/qoHLiDDreVNMupxGmSoNlyvsA3gw==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=6.9.0"
+      }
+    },
+    "node_modules/@babel/helpers": {
+      "version": "7.29.10",
+      "resolved": "https://registry.npmjs.org/@babel/helpers/-/helpers-7.29.10.tgz",
+      "integrity": "sha512-EMCx3AGZ3WfAl6ht7AyQoPm2Lh+BGYEMdc4Q6Hf7uSCDOZFuLq44qNwL+iaim8VlyYhRAo4X43+weadK8ZB4Yg==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/template": "^7.29.7",
+        "@babel/types": "^7.29.8"
+      },
+      "engines": {
+        "node": ">=6.9.0"
+      }
+    },
+    "node_modules/@babel/parser": {
+      "version": "7.29.9",
+      "resolved": "https://registry.npmjs.org/@babel/parser/-/parser-7.29.9.tgz",
+      "integrity": "sha512-CjXrNHTnvqBVqHgdBysY3vk2T8tpJHb5/RMeHJBTyVa9xgugCB0CJTx/3oO8RV2QRQP391RWpB7D6hLjm8V9uA==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/types": "^7.29.8"
+      },
+      "bin": {
+        "parser": "bin/babel-parser.js"
+      },
+      "engines": {
+        "node": ">=6.0.0"
+      }
+    },
+    "node_modules/@babel/plugin-transform-react-jsx-self": {
+      "version": "7.29.7",
+      "resolved": "https://registry.npmjs.org/@babel/plugin-transform-react-jsx-self/-/plugin-transform-react-jsx-self-7.29.7.tgz",
+      "integrity": "sha512-TL0hMc9xzy86VD31nUiwzd5otRAcyEPcsegCxolO0PvcXuH1v0kECe/UIznYFihpkvU5wg/jk4v0TTEFfm53fw==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/helper-plugin-utils": "^7.29.7"
+      },
+      "engines": {
+        "node": ">=6.9.0"
+      },
+      "peerDependencies": {
+        "@babel/core": "^7.0.0-0"
+      }
+    },
+    "node_modules/@babel/plugin-transform-react-jsx-source": {
+      "version": "7.29.7",
+      "resolved": "https://registry.npmjs.org/@babel/plugin-transform-react-jsx-source/-/plugin-transform-react-jsx-source-7.29.7.tgz",
+      "integrity": "sha512-06IyK09H3wi4cGbhDBwp5gUGo0IKtnYa8tyTiephirPCK6fbobVGiXMMI5zLQ4aKEYP3wZ3ArU44o+8KMrSG/Q==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/helper-plugin-utils": "^7.29.7"
+      },
+      "engines": {
+        "node": ">=6.9.0"
+      },
+      "peerDependencies": {
+        "@babel/core": "^7.0.0-0"
+      }
+    },
+    "node_modules/@babel/template": {
+      "version": "7.29.7",
+      "resolved": "https://registry.npmjs.org/@babel/template/-/template-7.29.7.tgz",
+      "integrity": "sha512-puq+Gf35oI24FeN11LkoUQFqv9uwNeWpxXZi/Ji3rRIoKAzKnxRaZ+Gkj0vKS9ZCiTESfng1N9LyOyXvo+m+Gg==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/code-frame": "^7.29.7",
+        "@babel/parser": "^7.29.7",
+        "@babel/types": "^7.29.7"
+      },
+      "engines": {
+        "node": ">=6.9.0"
+      }
+    },
+    "node_modules/@babel/traverse": {
+      "version": "7.29.10",
+      "resolved": "https://registry.npmjs.org/@babel/traverse/-/traverse-7.29.10.tgz",
+      "integrity": "sha512-B3lYAs2nkKskbgQ1nfy8Ma9ao9Q1rntTAQHrzzyDuj+TSO+X3le6PfWwqDvodsb+OumE10eMFfuMCTQSQ5iuIQ==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/code-frame": "^7.29.7",
+        "@babel/generator": "^7.29.8",
+        "@babel/helper-globals": "^7.29.7",
+        "@babel/parser": "^7.29.9",
+        "@babel/template": "^7.29.7",
+        "@babel/types": "^7.29.8",
+        "debug": "^4.3.1"
+      },
+      "engines": {
+        "node": ">=6.9.0"
+      }
+    },
+    "node_modules/@babel/types": {
+      "version": "7.29.8",
+      "resolved": "https://registry.npmjs.org/@babel/types/-/types-7.29.8.tgz",
+      "integrity": "sha512-Vj1jF3cPfxg7OAfoI7QnVKLoILlm2JF9pnVHrX8qx7AHMiYWT+NDAA7jChlNgRS4WTLc/fD1lXLmPixluj+3Gg==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/helper-string-parser": "^7.29.7",
+        "@babel/helper-validator-identifier": "^7.29.7"
+      },
+      "engines": {
+        "node": ">=6.9.0"
+      }
+    },
+    "node_modules/@esbuild/aix-ppc64": {
+      "version": "0.21.5",
+      "resolved": "https://registry.npmjs.org/@esbuild/aix-ppc64/-/aix-ppc64-0.21.5.tgz",
+      "integrity": "sha512-1SDgH6ZSPTlggy1yI6+Dbkiz8xzpHJEVAlF/AM1tHPLsf5STom9rwtjE4hKAF20FfXXNTFqEYXyJNWh1GiZedQ==",
+      "cpu": [
+        "ppc64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "aix"
+      ],
+      "engines": {
+        "node": ">=12"
+      }
+    },
+    "node_modules/@esbuild/android-arm": {
+      "version": "0.21.5",
+      "resolved": "https://registry.npmjs.org/@esbuild/android-arm/-/android-arm-0.21.5.tgz",
+      "integrity": "sha512-vCPvzSjpPHEi1siZdlvAlsPxXl7WbOVUBBAowWug4rJHb68Ox8KualB+1ocNvT5fjv6wpkX6o/iEpbDrf68zcg==",
+      "cpu": [
+        "arm"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "android"
+      ],
+      "engines": {
+        "node": ">=12"
+      }
+    },
+    "node_modules/@esbuild/android-arm64": {
+      "version": "0.21.5",
+      "resolved": "https://registry.npmjs.org/@esbuild/android-arm64/-/android-arm64-0.21.5.tgz",
+      "integrity": "sha512-c0uX9VAUBQ7dTDCjq+wdyGLowMdtR/GoC2U5IYk/7D1H1JYC0qseD7+11iMP2mRLN9RcCMRcjC4YMclCzGwS/A==",
+      "cpu": [
+        "arm64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "android"
+      ],
+      "engines": {
+        "node": ">=12"
+      }
+    },
+    "node_modules/@esbuild/android-x64": {
+      "version": "0.21.5",
+      "resolved": "https://registry.npmjs.org/@esbuild/android-x64/-/android-x64-0.21.5.tgz",
+      "integrity": "sha512-D7aPRUUNHRBwHxzxRvp856rjUHRFW1SdQATKXH2hqA0kAZb1hKmi02OpYRacl0TxIGz/ZmXWlbZgjwWYaCakTA==",
+      "cpu": [
+        "x64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "android"
+      ],
+      "engines": {
+        "node": ">=12"
+      }
+    },
+    "node_modules/@esbuild/darwin-arm64": {
+      "version": "0.21.5",
+      "resolved": "https://registry.npmjs.org/@esbuild/darwin-arm64/-/darwin-arm64-0.21.5.tgz",
+      "integrity": "sha512-DwqXqZyuk5AiWWf3UfLiRDJ5EDd49zg6O9wclZ7kUMv2WRFr4HKjXp/5t8JZ11QbQfUS6/cRCKGwYhtNAY88kQ==",
+      "cpu": [
+        "arm64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "darwin"
+      ],
+      "engines": {
+        "node": ">=12"
+      }
+    },
+    "node_modules/@esbuild/darwin-x64": {
+      "version": "0.21.5",
+      "resolved": "https://registry.npmjs.org/@esbuild/darwin-x64/-/darwin-x64-0.21.5.tgz",
+      "integrity": "sha512-se/JjF8NlmKVG4kNIuyWMV/22ZaerB+qaSi5MdrXtd6R08kvs2qCN4C09miupktDitvh8jRFflwGFBQcxZRjbw==",
+      "cpu": [
+        "x64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "darwin"
+      ],
+      "engines": {
+        "node": ">=12"
+      }
+    },
+    "node_modules/@esbuild/freebsd-arm64": {
+      "version": "0.21.5",
+      "resolved": "https://registry.npmjs.org/@esbuild/freebsd-arm64/-/freebsd-arm64-0.21.5.tgz",
+      "integrity": "sha512-5JcRxxRDUJLX8JXp/wcBCy3pENnCgBR9bN6JsY4OmhfUtIHe3ZW0mawA7+RDAcMLrMIZaf03NlQiX9DGyB8h4g==",
+      "cpu": [
+        "arm64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "freebsd"
+      ],
+      "engines": {
+        "node": ">=12"
+      }
+    },
+    "node_modules/@esbuild/freebsd-x64": {
+      "version": "0.21.5",
+      "resolved": "https://registry.npmjs.org/@esbuild/freebsd-x64/-/freebsd-x64-0.21.5.tgz",
+      "integrity": "sha512-J95kNBj1zkbMXtHVH29bBriQygMXqoVQOQYA+ISs0/2l3T9/kj42ow2mpqerRBxDJnmkUDCaQT/dfNXWX/ZZCQ==",
+      "cpu": [
+        "x64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "freebsd"
+      ],
+      "engines": {
+        "node": ">=12"
+      }
+    },
+    "node_modules/@esbuild/linux-arm": {
+      "version": "0.21.5",
+      "resolved": "https://registry.npmjs.org/@esbuild/linux-arm/-/linux-arm-0.21.5.tgz",
+      "integrity": "sha512-bPb5AHZtbeNGjCKVZ9UGqGwo8EUu4cLq68E95A53KlxAPRmUyYv2D6F0uUI65XisGOL1hBP5mTronbgo+0bFcA==",
+      "cpu": [
+        "arm"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "linux"
+      ],
+      "engines": {
+        "node": ">=12"
+      }
+    },
+    "node_modules/@esbuild/linux-arm64": {
+      "version": "0.21.5",
+      "resolved": "https://registry.npmjs.org/@esbuild/linux-arm64/-/linux-arm64-0.21.5.tgz",
+      "integrity": "sha512-ibKvmyYzKsBeX8d8I7MH/TMfWDXBF3db4qM6sy+7re0YXya+K1cem3on9XgdT2EQGMu4hQyZhan7TeQ8XkGp4Q==",
+      "cpu": [
+        "arm64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "linux"
+      ],
+      "engines": {
+        "node": ">=12"
+      }
+    },
+    "node_modules/@esbuild/linux-ia32": {
+      "version": "0.21.5",
+      "resolved": "https://registry.npmjs.org/@esbuild/linux-ia32/-/linux-ia32-0.21.5.tgz",
+      "integrity": "sha512-YvjXDqLRqPDl2dvRODYmmhz4rPeVKYvppfGYKSNGdyZkA01046pLWyRKKI3ax8fbJoK5QbxblURkwK/MWY18Tg==",
+      "cpu": [
+        "ia32"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "linux"
+      ],
+      "engines": {
+        "node": ">=12"
+      }
+    },
+    "node_modules/@esbuild/linux-loong64": {
+      "version": "0.21.5",
+      "resolved": "https://registry.npmjs.org/@esbuild/linux-loong64/-/linux-loong64-0.21.5.tgz",
+      "integrity": "sha512-uHf1BmMG8qEvzdrzAqg2SIG/02+4/DHB6a9Kbya0XDvwDEKCoC8ZRWI5JJvNdUjtciBGFQ5PuBlpEOXQj+JQSg==",
+      "cpu": [
+        "loong64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "linux"
+      ],
+      "engines": {
+        "node": ">=12"
+      }
+    },
+    "node_modules/@esbuild/linux-mips64el": {
+      "version": "0.21.5",
+      "resolved": "https://registry.npmjs.org/@esbuild/linux-mips64el/-/linux-mips64el-0.21.5.tgz",
+      "integrity": "sha512-IajOmO+KJK23bj52dFSNCMsz1QP1DqM6cwLUv3W1QwyxkyIWecfafnI555fvSGqEKwjMXVLokcV5ygHW5b3Jbg==",
+      "cpu": [
+        "mips64el"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "linux"
+      ],
+      "engines": {
+        "node": ">=12"
+      }
+    },
+    "node_modules/@esbuild/linux-ppc64": {
+      "version": "0.21.5",
+      "resolved": "https://registry.npmjs.org/@esbuild/linux-ppc64/-/linux-ppc64-0.21.5.tgz",
+      "integrity": "sha512-1hHV/Z4OEfMwpLO8rp7CvlhBDnjsC3CttJXIhBi+5Aj5r+MBvy4egg7wCbe//hSsT+RvDAG7s81tAvpL2XAE4w==",
+      "cpu": [
+        "ppc64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "linux"
+      ],
+      "engines": {
+        "node": ">=12"
+      }
+    },
+    "node_modules/@esbuild/linux-riscv64": {
+      "version": "0.21.5",
+      "resolved": "https://registry.npmjs.org/@esbuild/linux-riscv64/-/linux-riscv64-0.21.5.tgz",
+      "integrity": "sha512-2HdXDMd9GMgTGrPWnJzP2ALSokE/0O5HhTUvWIbD3YdjME8JwvSCnNGBnTThKGEB91OZhzrJ4qIIxk/SBmyDDA==",
+      "cpu": [
+        "riscv64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "linux"
+      ],
+      "engines": {
+        "node": ">=12"
+      }
+    },
+    "node_modules/@esbuild/linux-s390x": {
+      "version": "0.21.5",
+      "resolved": "https://registry.npmjs.org/@esbuild/linux-s390x/-/linux-s390x-0.21.5.tgz",
+      "integrity": "sha512-zus5sxzqBJD3eXxwvjN1yQkRepANgxE9lgOW2qLnmr8ikMTphkjgXu1HR01K4FJg8h1kEEDAqDcZQtbrRnB41A==",
+      "cpu": [
+        "s390x"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "linux"
+      ],
+      "engines": {
+        "node": ">=12"
+      }
+    },
+    "node_modules/@esbuild/linux-x64": {
+      "version": "0.21.5",
+      "resolved": "https://registry.npmjs.org/@esbuild/linux-x64/-/linux-x64-0.21.5.tgz",
+      "integrity": "sha512-1rYdTpyv03iycF1+BhzrzQJCdOuAOtaqHTWJZCWvijKD2N5Xu0TtVC8/+1faWqcP9iBCWOmjmhoH94dH82BxPQ==",
+      "cpu": [
+        "x64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "linux"
+      ],
+      "engines": {
+        "node": ">=12"
+      }
+    },
+    "node_modules/@esbuild/netbsd-x64": {
+      "version": "0.21.5",
+      "resolved": "https://registry.npmjs.org/@esbuild/netbsd-x64/-/netbsd-x64-0.21.5.tgz",
+      "integrity": "sha512-Woi2MXzXjMULccIwMnLciyZH4nCIMpWQAs049KEeMvOcNADVxo0UBIQPfSmxB3CWKedngg7sWZdLvLczpe0tLg==",
+      "cpu": [
+        "x64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "netbsd"
+      ],
+      "engines": {
+        "node": ">=12"
+      }
+    },
+    "node_modules/@esbuild/openbsd-x64": {
+      "version": "0.21.5",
+      "resolved": "https://registry.npmjs.org/@esbuild/openbsd-x64/-/openbsd-x64-0.21.5.tgz",
+      "integrity": "sha512-HLNNw99xsvx12lFBUwoT8EVCsSvRNDVxNpjZ7bPn947b8gJPzeHWyNVhFsaerc0n3TsbOINvRP2byTZ5LKezow==",
+      "cpu": [
+        "x64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "openbsd"
+      ],
+      "engines": {
+        "node": ">=12"
+      }
+    },
+    "node_modules/@esbuild/sunos-x64": {
+      "version": "0.21.5",
+      "resolved": "https://registry.npmjs.org/@esbuild/sunos-x64/-/sunos-x64-0.21.5.tgz",
+      "integrity": "sha512-6+gjmFpfy0BHU5Tpptkuh8+uw3mnrvgs+dSPQXQOv3ekbordwnzTVEb4qnIvQcYXq6gzkyTnoZ9dZG+D4garKg==",
+      "cpu": [
+        "x64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "sunos"
+      ],
+      "engines": {
+        "node": ">=12"
+      }
+    },
+    "node_modules/@esbuild/win32-arm64": {
+      "version": "0.21.5",
+      "resolved": "https://registry.npmjs.org/@esbuild/win32-arm64/-/win32-arm64-0.21.5.tgz",
+      "integrity": "sha512-Z0gOTd75VvXqyq7nsl93zwahcTROgqvuAcYDUr+vOv8uHhNSKROyU961kgtCD1e95IqPKSQKH7tBTslnS3tA8A==",
+      "cpu": [
+        "arm64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "win32"
+      ],
+      "engines": {
+        "node": ">=12"
+      }
+    },
+    "node_modules/@esbuild/win32-ia32": {
+      "version": "0.21.5",
+      "resolved": "https://registry.npmjs.org/@esbuild/win32-ia32/-/win32-ia32-0.21.5.tgz",
+      "integrity": "sha512-SWXFF1CL2RVNMaVs+BBClwtfZSvDgtL//G/smwAc5oVK/UPu2Gu9tIaRgFmYFFKrmg3SyAjSrElf0TiJ1v8fYA==",
+      "cpu": [
+        "ia32"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "win32"
+      ],
+      "engines": {
+        "node": ">=12"
+      }
+    },
+    "node_modules/@esbuild/win32-x64": {
+      "version": "0.21.5",
+      "resolved": "https://registry.npmjs.org/@esbuild/win32-x64/-/win32-x64-0.21.5.tgz",
+      "integrity": "sha512-tQd/1efJuzPC6rCFwEvLtci/xNFcTZknmXs98FYDfGE4wP9ClFV98nyKrzJKVPMhdDnjzLhdUyMX4PsQAPjwIw==",
+      "cpu": [
+        "x64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "win32"
+      ],
+      "engines": {
+        "node": ">=12"
+      }
+    },
+    "node_modules/@jridgewell/gen-mapping": {
+      "version": "0.3.13",
+      "resolved": "https://registry.npmjs.org/@jridgewell/gen-mapping/-/gen-mapping-0.3.13.tgz",
+      "integrity": "sha512-2kkt/7niJ6MgEPxF0bYdQ6etZaA+fQvDcLKckhy1yIQOzaoKjBBjSj63/aLVjYE3qhRt5dvM+uUyfCg6UKCBbA==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@jridgewell/sourcemap-codec": "^1.5.0",
+        "@jridgewell/trace-mapping": "^0.3.24"
+      }
+    },
+    "node_modules/@jridgewell/remapping": {
+      "version": "2.3.5",
+      "resolved": "https://registry.npmjs.org/@jridgewell/remapping/-/remapping-2.3.5.tgz",
+      "integrity": "sha512-LI9u/+laYG4Ds1TDKSJW2YPrIlcVYOwi2fUC6xB43lueCjgxV4lffOCZCtYFiH6TNOX+tQKXx97T4IKHbhyHEQ==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@jridgewell/gen-mapping": "^0.3.5",
+        "@jridgewell/trace-mapping": "^0.3.24"
+      }
+    },
+    "node_modules/@jridgewell/resolve-uri": {
+      "version": "3.1.2",
+      "resolved": "https://registry.npmjs.org/@jridgewell/resolve-uri/-/resolve-uri-3.1.2.tgz",
+      "integrity": "sha512-bRISgCIjP20/tbWSPWMEi54QVPRZExkuD9lJL+UIxUKtwVJA8wW1Trb1jMs1RFXo1CBTNZ/5hpC9QvmKWdopKw==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=6.0.0"
+      }
+    },
+    "node_modules/@jridgewell/sourcemap-codec": {
+      "version": "1.6.0",
+      "resolved": "https://registry.npmjs.org/@jridgewell/sourcemap-codec/-/sourcemap-codec-1.6.0.tgz",
+      "integrity": "sha512-T7jf+5zgsZHwNJ4lvQ7/aezbyk0nNX+zJVWpmHA7VYsEx7a7qr5Rg5IbtJFqkgze5Y2sruq1RUY8Q837Od7iFw==",
+      "dev": true,
+      "license": "MIT"
+    },
+    "node_modules/@jridgewell/trace-mapping": {
+      "version": "0.3.31",
+      "resolved": "https://registry.npmjs.org/@jridgewell/trace-mapping/-/trace-mapping-0.3.31.tgz",
+      "integrity": "sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@jridgewell/resolve-uri": "^3.1.0",
+        "@jridgewell/sourcemap-codec": "^1.4.14"
+      }
+    },
+    "node_modules/@napi-rs/lzma-linux-x64-gnu": {
+      "version": "1.5.1",
+      "resolved": "https://registry.npmjs.org/@napi-rs/lzma-linux-x64-gnu/-/lzma-linux-x64-gnu-1.5.1.tgz",
+      "integrity": "sha512-oTXEIha4SsuXdTA4Iyskj0kpdx2yVXdhd75c2v3xGrHFfVMsbhTPZU/nMPL4sWKo4pBHm3aucLaqGlF696dTyQ==",
+      "cpu": [
+        "x64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "linux"
+      ],
+      "engines": {
+        "node": "^22.20 || ^24.12 || >=25"
+      }
+    },
+    "node_modules/@nodelib/fs.scandir": {
+      "version": "2.1.5",
+      "resolved": "https://registry.npmjs.org/@nodelib/fs.scandir/-/fs.scandir-2.1.5.tgz",
+      "integrity": "sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@nodelib/fs.stat": "2.0.5",
+        "run-parallel": "^1.1.9"
+      },
+      "engines": {
+        "node": ">= 8"
+      }
+    },
+    "node_modules/@nodelib/fs.stat": {
+      "version": "2.0.5",
+      "resolved": "https://registry.npmjs.org/@nodelib/fs.stat/-/fs.stat-2.0.5.tgz",
+      "integrity": "sha512-RkhPPp2zrqDAQA/2jNhnztcPAlv64XdhIp7a7454A5ovI7Bukxgt7MX7udwAu3zg1DcpPU0rz3VV1SeaqvY4+A==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">= 8"
+      }
+    },
+    "node_modules/@nodelib/fs.walk": {
+      "version": "1.2.8",
+      "resolved": "https://registry.npmjs.org/@nodelib/fs.walk/-/fs.walk-1.2.8.tgz",
+      "integrity": "sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@nodelib/fs.scandir": "2.1.5",
+        "fastq": "^1.6.0"
+      },
+      "engines": {
+        "node": ">= 8"
+      }
+    },
+    "node_modules/@rolldown/pluginutils": {
+      "version": "1.0.0-beta.27",
+      "resolved": "https://registry.npmjs.org/@rolldown/pluginutils/-/pluginutils-1.0.0-beta.27.tgz",
+      "integrity": "sha512-+d0F4MKMCbeVUJwG96uQ4SgAznZNSq93I3V+9NHA4OpvqG8mRCpGdKmK8l/dl02h2CCDHwW2FqilnTyDcAnqjA==",
+      "dev": true,
+      "license": "MIT"
+    },
+    "node_modules/@rollup/rollup-android-arm-eabi": {
+      "version": "4.64.7",
+      "resolved": "https://registry.npmjs.org/@rollup/rollup-android-arm-eabi/-/rollup-android-arm-eabi-4.64.7.tgz",
+      "integrity": "sha512-GFF2tHk0NqYVObrK0+/ps/LEXsV/v2q6Lyiy7mZr+Ej24fpQScvqK2ziz9NHeEQYnKWKym38Ml7dZbPtC9tuAw==",
+      "cpu": [
+        "arm"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "android"
+      ]
+    },
+    "node_modules/@rollup/rollup-android-arm64": {
+      "version": "4.64.7",
+      "resolved": "https://registry.npmjs.org/@rollup/rollup-android-arm64/-/rollup-android-arm64-4.64.7.tgz",
+      "integrity": "sha512-BOymcXJFYYXqluDidj6sLelNjXruC3u1BqVxLn2OPCXH9xaPSOTH+MS4uychsGI1NU7tJoiv9KvqijDHFe+hhQ==",
+      "cpu": [
+        "arm64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "android"
+      ]
+    },
+    "node_modules/@rollup/rollup-darwin-arm64": {
+      "version": "4.64.7",
+      "resolved": "https://registry.npmjs.org/@rollup/rollup-darwin-arm64/-/rollup-darwin-arm64-4.64.7.tgz",
+      "integrity": "sha512-jgVpGweIbls2H5jfBB70tnX52abMd5pJr3xmtoDILx6JdmGl+Un+tMb9R+MbHPVB46tTBpY8emtn7M71SnQhEQ==",
+      "cpu": [
+        "arm64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "darwin"
+      ]
+    },
+    "node_modules/@rollup/rollup-darwin-x64": {
+      "version": "4.64.7",
+      "resolved": "https://registry.npmjs.org/@rollup/rollup-darwin-x64/-/rollup-darwin-x64-4.64.7.tgz",
+      "integrity": "sha512-AVMpt94mrXH7WjyWKmd9nT4RC5yM0AN3Lt6A89xVIsuLDi3dDX6dxMytLbW36FlppY9JsoqUoS3LUUpUrYxiMQ==",
+      "cpu": [
+        "x64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "darwin"
+      ]
+    },
+    "node_modules/@rollup/rollup-freebsd-arm64": {
+      "version": "4.64.7",
+      "resolved": "https://registry.npmjs.org/@rollup/rollup-freebsd-arm64/-/rollup-freebsd-arm64-4.64.7.tgz",
+      "integrity": "sha512-Nje29c/MyajxRNFGU05oyeTDS6SWdMg/wWMSlZSBTBju5BKz2NVc0kFiFSQGzRELNiB+CBk/ZvAVsWsENgjGag==",
+      "cpu": [
+        "arm64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "freebsd"
+      ]
+    },
+    "node_modules/@rollup/rollup-freebsd-x64": {
+      "version": "4.64.7",
+      "resolved": "https://registry.npmjs.org/@rollup/rollup-freebsd-x64/-/rollup-freebsd-x64-4.64.7.tgz",
+      "integrity": "sha512-xxgN5/kMzCNz/NYJ4t49B0/WS6InNlWv6xvgwUQqNnWM9WJMMwMUGWrAxdNEgYWdHL0sMnuh8I87StGrIMTA+w==",
+      "cpu": [
+        "x64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "freebsd"
+      ]
+    },
+    "node_modules/@rollup/rollup-linux-arm-gnueabihf": {
+      "version": "4.64.7",
+      "resolved": "https://registry.npmjs.org/@rollup/rollup-linux-arm-gnueabihf/-/rollup-linux-arm-gnueabihf-4.64.7.tgz",
+      "integrity": "sha512-5U/9gVn/X657I8+NHoHO9Wnfyd0lEXwqbslobRoB9TC8SwYzOitcIr6TLE7531Q/NWs3L4mb+YOGzlf3vHIeYw==",
+      "cpu": [
+        "arm"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "linux"
+      ]
+    },
+    "node_modules/@rollup/rollup-linux-arm-musleabihf": {
+      "version": "4.64.7",
+      "resolved": "https://registry.npmjs.org/@rollup/rollup-linux-arm-musleabihf/-/rollup-linux-arm-musleabihf-4.64.7.tgz",
+      "integrity": "sha512-hcDS0a/Y8ggM3dcOfzH7UpSaogCViWTtNDSl0EXpWIj8g8/r86ITqptjil2hayTXS0Umzb+Yt3mjgpQVFVf2+A==",
+      "cpu": [
+        "arm"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "linux"
+      ]
+    },
+    "node_modules/@rollup/rollup-linux-arm64-gnu": {
+      "version": "4.64.7",
+      "resolved": "https://registry.npmjs.org/@rollup/rollup-linux-arm64-gnu/-/rollup-linux-arm64-gnu-4.64.7.tgz",
+      "integrity": "sha512-awbAr4N7Qd/yjZAQBEEPzgcPveYG2Gi5L6gq1/Bp+3SMRjn5F68Wv1zKsntzvvoioBR6yKvhLtWqu11am1TsxA==",
+      "cpu": [
+        "arm64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "linux"
+      ]
+    },
+    "node_modules/@rollup/rollup-linux-arm64-musl": {
+      "version": "4.64.7",
+      "resolved": "https://registry.npmjs.org/@rollup/rollup-linux-arm64-musl/-/rollup-linux-arm64-musl-4.64.7.tgz",
+      "integrity": "sha512-Ut7xQJfeLhzu2yN3rHzVvL9ccyPJvN4aCdP1V7hJ5lGxX/eCzgB9SiMk/Md3J+rWWZgvoYsDW4BUFggJr32pBA==",
+      "cpu": [
+        "arm64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "linux"
+      ]
+    },
+    "node_modules/@rollup/rollup-linux-loong64-gnu": {
+      "version": "4.64.7",
+      "resolved": "https://registry.npmjs.org/@rollup/rollup-linux-loong64-gnu/-/rollup-linux-loong64-gnu-4.64.7.tgz",
+      "integrity": "sha512-trqoni/vHkuM5oo5iQhoKPh6fjjD7E80pMgCXWgGxU8vSRPUlwvG8GeYvEEcB6eJAxNa99WH9iVHPHelgtKiHA==",
+      "cpu": [
+        "loong64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "linux"
+      ]
+    },
+    "node_modules/@rollup/rollup-linux-loong64-musl": {
+      "version": "4.64.7",
+      "resolved": "https://registry.npmjs.org/@rollup/rollup-linux-loong64-musl/-/rollup-linux-loong64-musl-4.64.7.tgz",
+      "integrity": "sha512-gvlUy0XFIwtUWiQmhc+4GT2Knm3KosinpUVhr7CtTFA78gFDnE5NWwMPzHrJsYpKkh2LlY7yvBIboN1FAV6Xeg==",
+      "cpu": [
+        "loong64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "linux"
+      ]
+    },
+    "node_modules/@rollup/rollup-linux-ppc64-gnu": {
+      "version": "4.64.7",
+      "resolved": "https://registry.npmjs.org/@rollup/rollup-linux-ppc64-gnu/-/rollup-linux-ppc64-gnu-4.64.7.tgz",
+      "integrity": "sha512-8yS/kSXTJ/47Z62JW+C2AJ3vd/8zZw016vFjtNpZwmZlwJumLua4s1i78dkYuSSqQ+0aIMxJcBp/4uIwp2ehjA==",
+      "cpu": [
+        "ppc64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "linux"
+      ]
+    },
+    "node_modules/@rollup/rollup-linux-ppc64-musl": {
+      "version": "4.64.7",
+      "resolved": "https://registry.npmjs.org/@rollup/rollup-linux-ppc64-musl/-/rollup-linux-ppc64-musl-4.64.7.tgz",
+      "integrity": "sha512-mxVSKvvty0hOP1AFo/l4Kpv3i3HK0zx4rYUrirZDToYlWhS3xzmIkq3vUJ7rtrM2cPyXveDyDT6M1FfXZ9hTRA==",
+      "cpu": [
+        "ppc64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "linux"
+      ]
+    },
+    "node_modules/@rollup/rollup-linux-riscv64-gnu": {
+      "version": "4.64.7",
+      "resolved": "https://registry.npmjs.org/@rollup/rollup-linux-riscv64-gnu/-/rollup-linux-riscv64-gnu-4.64.7.tgz",
+      "integrity": "sha512-lEse1zra1CagM+uHH2bl28GInDsZZ45NJzHei2OMaXQFzZWKBO1hFo07rS0xB6ayV4WU360UrSmPDSyCMpYsUQ==",
+      "cpu": [
+        "riscv64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "linux"
+      ]
+    },
+    "node_modules/@rollup/rollup-linux-riscv64-musl": {
+      "version": "4.64.7",
+      "resolved": "https://registry.npmjs.org/@rollup/rollup-linux-riscv64-musl/-/rollup-linux-riscv64-musl-4.64.7.tgz",
+      "integrity": "sha512-d/cqCoiG9WMZ5VuJZ5Qdlv9g97QyoGwnmvHccvGhKSacTy7xFrAS+jMcJSBdMNOw1oacSkl6p7K6O/DRYTKL3g==",
+      "cpu": [
+        "riscv64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "linux"
+      ]
+    },
+    "node_modules/@rollup/rollup-linux-s390x-gnu": {
+      "version": "4.64.7",
+      "resolved": "https://registry.npmjs.org/@rollup/rollup-linux-s390x-gnu/-/rollup-linux-s390x-gnu-4.64.7.tgz",
+      "integrity": "sha512-kVEA//CeDOZZP1XCH2JBgqXb9+ALlwuA/4civaazMVdgzaSQC9WM38w65zG/LLk0lA7F9Od19CSBZW7J9mCbNg==",
+      "cpu": [
+        "s390x"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "linux"
+      ]
+    },
+    "node_modules/@rollup/rollup-linux-x64-gnu": {
+      "version": "4.64.7",
+      "resolved": "https://registry.npmjs.org/@rollup/rollup-linux-x64-gnu/-/rollup-linux-x64-gnu-4.64.7.tgz",
+      "integrity": "sha512-14oLfDsOSr0TSntT/34jRg/V8B2XW/Jomh9zX9CjIM9gwwNlI1OCymS/GVn0DV32h67eRf7U0GGem0rvfXgNwQ==",
+      "cpu": [
+        "x64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "linux"
+      ]
+    },
+    "node_modules/@rollup/rollup-linux-x64-musl": {
+      "version": "4.64.7",
+      "resolved": "https://registry.npmjs.org/@rollup/rollup-linux-x64-musl/-/rollup-linux-x64-musl-4.64.7.tgz",
+      "integrity": "sha512-dFVtPfjZqAnUPpPY4Bfg+87yo1IBW9HiY8iCFtg49Pn46MfZTebSHZh8PL6SOsgyt9LQP8Nj/sE6jm3aWpySmQ==",
+      "cpu": [
+        "x64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "linux"
+      ]
+    },
+    "node_modules/@rollup/rollup-openbsd-x64": {
+      "version": "4.64.7",
+      "resolved": "https://registry.npmjs.org/@rollup/rollup-openbsd-x64/-/rollup-openbsd-x64-4.64.7.tgz",
+      "integrity": "sha512-Dm9CZ2SM3u2NgvBj4awW/gGqkOwzH8f6MSYIJE6+bKcKLI+T0+LhpD6vtetTfrIIx+rLXDf5RJqBP6v7V5O+wg==",
+      "cpu": [
+        "x64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "openbsd"
+      ]
+    },
+    "node_modules/@rollup/rollup-openharmony-arm64": {
+      "version": "4.64.7",
+      "resolved": "https://registry.npmjs.org/@rollup/rollup-openharmony-arm64/-/rollup-openharmony-arm64-4.64.7.tgz",
+      "integrity": "sha512-oaxsvS2mL6+78741CT2HCORBvy1USg3Wqpt5qvZwy3aMXRMl4zxyDo8maeFRWJkF3dp0Wbi71fKH5Gr9YI3vYA==",
+      "cpu": [
+        "arm64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "openharmony"
+      ]
+    },
+    "node_modules/@rollup/rollup-win32-arm64-msvc": {
+      "version": "4.64.7",
+      "resolved": "https://registry.npmjs.org/@rollup/rollup-win32-arm64-msvc/-/rollup-win32-arm64-msvc-4.64.7.tgz",
+      "integrity": "sha512-UKZz1Y4mxUqkWh60uH7B1aZn6UcAimPk4ipRktpb3wfZq7JrzZYyAXTwiafkb3T+kd5P3Sf+vzcRdsDks4WtjQ==",
+      "cpu": [
+        "arm64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "win32"
+      ]
+    },
+    "node_modules/@rollup/rollup-win32-ia32-msvc": {
+      "version": "4.64.7",
+      "resolved": "https://registry.npmjs.org/@rollup/rollup-win32-ia32-msvc/-/rollup-win32-ia32-msvc-4.64.7.tgz",
+      "integrity": "sha512-WWkSuC1J+mZJnsDh0mRaCAFSWfQdl6y3fDjZeWElI6zHo8CcOSG5lY3yurKJjEq+FrX0WD60sFrVVpbHqzMmrw==",
+      "cpu": [
+        "ia32"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "win32"
+      ]
+    },
+    "node_modules/@rollup/rollup-win32-x64-gnu": {
+      "version": "4.64.7",
+      "resolved": "https://registry.npmjs.org/@rollup/rollup-win32-x64-gnu/-/rollup-win32-x64-gnu-4.64.7.tgz",
+      "integrity": "sha512-u9bp2yXCI3/BUjUxY6uWknAY32pfvvDCPysyUTySotx0dj3ydlFHrRQYfn/b/kZgnfjyEwySMtI7Ga054uiysQ==",
+      "cpu": [
+        "x64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "win32"
+      ]
+    },
+    "node_modules/@rollup/rollup-win32-x64-msvc": {
+      "version": "4.64.7",
+      "resolved": "https://registry.npmjs.org/@rollup/rollup-win32-x64-msvc/-/rollup-win32-x64-msvc-4.64.7.tgz",
+      "integrity": "sha512-EhX6N3XPMEnVU5cRfNgzPOKcSucsbu3nNNWuoAaEuKIqmddBKHN5b9d4rPe65T1I+FaOT176JKiZNsUBp3rqbA==",
+      "cpu": [
+        "x64"
+      ],
+      "dev": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "win32"
+      ]
+    },
+    "node_modules/@types/babel__core": {
+      "version": "7.20.5",
+      "resolved": "https://registry.npmjs.org/@types/babel__core/-/babel__core-7.20.5.tgz",
+      "integrity": "sha512-qoQprZvz5wQFJwMDqeseRXWv3rqMvhgpbXFfVyWhbx9X47POIA6i/+dXefEmZKoAgOaTdaIgNSMqMIU61yRyzA==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/parser": "^7.20.7",
+        "@babel/types": "^7.20.7",
+        "@types/babel__generator": "*",
+        "@types/babel__template": "*",
+        "@types/babel__traverse": "*"
+      }
+    },
+    "node_modules/@types/babel__generator": {
+      "version": "7.27.0",
+      "resolved": "https://registry.npmjs.org/@types/babel__generator/-/babel__generator-7.27.0.tgz",
+      "integrity": "sha512-ufFd2Xi92OAVPYsy+P4n7/U7e68fex0+Ee8gSG9KX7eo084CWiQ4sdxktvdl0bOPupXtVJPY19zk6EwWqUQ8lg==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/types": "^7.0.0"
+      }
+    },
+    "node_modules/@types/babel__template": {
+      "version": "7.4.4",
+      "resolved": "https://registry.npmjs.org/@types/babel__template/-/babel__template-7.4.4.tgz",
+      "integrity": "sha512-h/NUaSyG5EyxBIp8YRxo4RMe2/qQgvyowRwVMzhYhBCONbW8PUsg4lkFMrhgZhUe5z3L3MiLDuvyJ/CaPa2A8A==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/parser": "^7.1.0",
+        "@babel/types": "^7.0.0"
+      }
+    },
+    "node_modules/@types/babel__traverse": {
+      "version": "7.28.0",
+      "resolved": "https://registry.npmjs.org/@types/babel__traverse/-/babel__traverse-7.28.0.tgz",
+      "integrity": "sha512-8PvcXf70gTDZBgt9ptxJ8elBeBjcLOAcOtoO/mPJjtji1+CdGbHgm77om1GrsPxsiE+uXIpNSK64UYaIwQXd4Q==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/types": "^7.28.2"
+      }
+    },
+    "node_modules/@types/estree": {
+      "version": "1.0.9",
+      "resolved": "https://registry.npmjs.org/@types/estree/-/estree-1.0.9.tgz",
+      "integrity": "sha512-GhdPgy1el4/ImP05X05Uw4cw2/M93BCUmnEvWZNStlCzEKME4Fkk+YpoA5OiHNQmoS7Cafb8Xa3Pya8m1Qrzeg==",
+      "dev": true,
+      "license": "MIT"
+    },
+    "node_modules/@types/prop-types": {
+      "version": "15.7.15",
+      "resolved": "https://registry.npmjs.org/@types/prop-types/-/prop-types-15.7.15.tgz",
+      "integrity": "sha512-F6bEyamV9jKGAFBEmlQnesRPGOQqS2+Uwi0Em15xenOxHaf2hv6L8YCVn3rPdPJOiJfPiCnLIRyvwVaqMY3MIw==",
+      "dev": true,
+      "license": "MIT"
+    },
+    "node_modules/@types/react": {
+      "version": "18.3.31",
+      "resolved": "https://registry.npmjs.org/@types/react/-/react-18.3.31.tgz",
+      "integrity": "sha512-vfEqpXTvwT91yhmwdfouStN2hSKwTvyRs8qpLfADyrq/kxDw0hZM7Wk9Ug1FELj8hIby+S/+kQCSRFF32nv2Qw==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@types/prop-types": "*",
+        "csstype": "^3.2.2"
+      }
+    },
+    "node_modules/@types/react-dom": {
+      "version": "18.3.7",
+      "resolved": "https://registry.npmjs.org/@types/react-dom/-/react-dom-18.3.7.tgz",
+      "integrity": "sha512-MEe3UeoENYVFXzoXEWsvcpg6ZvlrFNlOQ7EOsvhI3CfAXwzPfO8Qwuxd40nepsYKqyyVQnTdEfv68q91yLcKrQ==",
+      "dev": true,
+      "license": "MIT",
+      "peerDependencies": {
+        "@types/react": "^18.0.0"
+      }
+    },
+    "node_modules/@vitejs/plugin-react": {
+      "version": "4.7.0",
+      "resolved": "https://registry.npmjs.org/@vitejs/plugin-react/-/plugin-react-4.7.0.tgz",
+      "integrity": "sha512-gUu9hwfWvvEDBBmgtAowQCojwZmJ5mcLn3aufeCsitijs3+f2NsrPtlAWIR6OPiqljl96GVCUbLe0HyqIpVaoA==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@babel/core": "^7.28.0",
+        "@babel/plugin-transform-react-jsx-self": "^7.27.1",
+        "@babel/plugin-transform-react-jsx-source": "^7.27.1",
+        "@rolldown/pluginutils": "1.0.0-beta.27",
+        "@types/babel__core": "^7.20.5",
+        "react-refresh": "^0.17.0"
+      },
+      "engines": {
+        "node": "^14.18.0 || >=16.0.0"
+      },
+      "peerDependencies": {
+        "vite": "^4.2.0 || ^5.0.0 || ^6.0.0 || ^7.0.0"
+      }
+    },
+    "node_modules/any-promise": {
+      "version": "1.3.0",
+      "resolved": "https://registry.npmjs.org/any-promise/-/any-promise-1.3.0.tgz",
+      "integrity": "sha512-7UvmKalWRt1wgjL1RrGxoSJW/0QZFIegpeGvZG9kjp8vrRu55XTHbwnqq2GpXm9uLbcuhxm3IqX9OB4MZR1b2A==",
+      "dev": true,
+      "license": "MIT"
+    },
+    "node_modules/anymatch": {
+      "version": "3.1.3",
+      "resolved": "https://registry.npmjs.org/anymatch/-/anymatch-3.1.3.tgz",
+      "integrity": "sha512-KMReFUr0B4t+D+OBkjR3KYqvocp2XaSzO55UcB6mgQMd3KbcE+mWTyvVV7D/zsdEbNnV6acZUutkiHQXvTr1Rw==",
+      "dev": true,
+      "license": "ISC",
+      "dependencies": {
+        "normalize-path": "^3.0.0",
+        "picomatch": "^2.0.4"
+      },
+      "engines": {
+        "node": ">= 8"
+      }
+    },
+    "node_modules/arg": {
+      "version": "5.0.2",
+      "resolved": "https://registry.npmjs.org/arg/-/arg-5.0.2.tgz",
+      "integrity": "sha512-PYjyFOLKQ9y57JvQ6QLo8dAgNqswh8M1RMJYdQduT6xbWSgK36P/Z/v+p888pM69jMMfS8Xd8F6I1kQ/I9HUGg==",
+      "dev": true,
+      "license": "MIT"
+    },
+    "node_modules/autoprefixer": {
+      "version": "10.6.1",
+      "resolved": "https://registry.npmjs.org/autoprefixer/-/autoprefixer-10.6.1.tgz",
+      "integrity": "sha512-cL1Qz6ADZhcEbny/8HPfe99J6HhNoYtpX2LFLIbhgGE7Q1hlQVkYFdetDN7Id3KiQxhDrHwzlHr/YQCnZ8+xSA==",
+      "dev": true,
+      "funding": [
+        {
+          "type": "opencollective",
+          "url": "https://opencollective.com/postcss/"
+        },
+        {
+          "type": "tidelift",
+          "url": "https://tidelift.com/funding/github/npm/autoprefixer"
+        },
+        {
+          "type": "github",
+          "url": "https://github.com/sponsors/ai"
+        }
+      ],
+      "license": "MIT",
+      "dependencies": {
+        "browserslist": "^4.28.9",
+        "caniuse-lite": "^1.0.30001810",
+        "fraction.js": "^5.3.4",
+        "picocolors": "^1.1.1",
+        "postcss-value-parser": "^4.2.0"
+      },
+      "bin": {
+        "autoprefixer": "bin/autoprefixer"
+      },
+      "engines": {
+        "node": "^10 || ^12 || >=14"
+      },
+      "peerDependencies": {
+        "postcss": "^8.1.0"
+      }
+    },
+    "node_modules/baseline-browser-mapping": {
+      "version": "2.11.29",
+      "resolved": "https://registry.npmjs.org/baseline-browser-mapping/-/baseline-browser-mapping-2.11.29.tgz",
+      "integrity": "sha512-YeesxhUmR4h5y5V8KF8iBCqJb8YFrBJ++XBTeGcWIaQOYXGN19JM0FoiOjAhwuDoln8owMgXcWBmgHtYSkky2w==",
+      "dev": true,
+      "license": "Apache-2.0",
+      "bin": {
+        "baseline-browser-mapping": "dist/cli.cjs"
+      },
+      "engines": {
+        "node": ">=6.0.0"
+      }
+    },
+    "node_modules/binary-extensions": {
+      "version": "2.3.0",
+      "resolved": "https://registry.npmjs.org/binary-extensions/-/binary-extensions-2.3.0.tgz",
+      "integrity": "sha512-Ceh+7ox5qe7LJuLHoY0feh3pHuUDHAcRUeyL2VYghZwfpkNIy/+8Ocg0a3UuSoYzavmylwuLWQOf3hl0jjMMIw==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=8"
+      },
+      "funding": {
+        "url": "https://github.com/sponsors/sindresorhus"
+      }
+    },
+    "node_modules/braces": {
+      "version": "3.0.3",
+      "resolved": "https://registry.npmjs.org/braces/-/braces-3.0.3.tgz",
+      "integrity": "sha512-yQbXgO/OSZVD2IsiLlro+7Hf6Q18EJrKSEsdoMzKePKXct3gvD8oLcOQdIzGupr5Fj+EDe8gO/lxc1BzfMpxvA==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "fill-range": "^7.1.1"
+      },
+      "engines": {
+        "node": ">=8"
+      }
+    },
+    "node_modules/browserslist": {
+      "version": "4.29.3",
+      "resolved": "https://registry.npmjs.org/browserslist/-/browserslist-4.29.3.tgz",
+      "integrity": "sha512-1R4kiYKXGViqEN0CnoDrXc1StD9niAwu+j2dukWzrD4bJgsD4lDmEp0CRbc6E/vYJIfTHwPmwyaKtVSudICdPA==",
+      "dev": true,
+      "funding": [
+        {
+          "type": "opencollective",
+          "url": "https://opencollective.com/browserslist"
+        },
+        {
+          "type": "tidelift",
+          "url": "https://tidelift.com/funding/github/npm/browserslist"
+        },
+        {
+          "type": "github",
+          "url": "https://github.com/sponsors/ai"
+        }
+      ],
+      "license": "MIT",
+      "dependencies": {
+        "baseline-browser-mapping": "^2.11.26",
+        "caniuse-lite": "^1.0.30001813",
+        "electron-to-chromium": "^1.5.439",
+        "node-releases": "^2.0.57",
+        "update-browserslist-db": "^1.3.3"
+      },
+      "bin": {
+        "browserslist": "cli.js"
+      },
+      "engines": {
+        "node": "^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7"
+      }
+    },
+    "node_modules/camelcase-css": {
+      "version": "2.0.1",
+      "resolved": "https://registry.npmjs.org/camelcase-css/-/camelcase-css-2.0.1.tgz",
+      "integrity": "sha512-QOSvevhslijgYwRx6Rv7zKdMF8lbRmx+uQGx2+vDc+KI/eBnsy9kit5aj23AgGu3pa4t9AgwbnXWqS+iOY+2aA==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">= 6"
+      }
+    },
+    "node_modules/caniuse-lite": {
+      "version": "1.0.30001816",
+      "resolved": "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001816.tgz",
+      "integrity": "sha512-+8Yx7BXCoqk6IF8yTicjfUR6D/ldJzdlsodlEOiOSPmhK844WIgk67/zIQaGAOxNkZyyvBlrRFnLvqKIoqbAFw==",
+      "dev": true,
+      "funding": [
+        {
+          "type": "opencollective",
+          "url": "https://opencollective.com/browserslist"
+        },
+        {
+          "type": "tidelift",
+          "url": "https://tidelift.com/funding/github/npm/caniuse-lite"
+        },
+        {
+          "type": "github",
+          "url": "https://github.com/sponsors/ai"
+        }
+      ],
+      "license": "CC-BY-4.0"
+    },
+    "node_modules/chokidar": {
+      "version": "3.6.0",
+      "resolved": "https://registry.npmjs.org/chokidar/-/chokidar-3.6.0.tgz",
+      "integrity": "sha512-7VT13fmjotKpGipCW9JEQAusEPE+Ei8nl6/g4FBAmIm0GOOLMua9NDDo/DWp0ZAxCr3cPq5ZpBqmPAQgDda2Pw==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "anymatch": "~3.1.2",
+        "braces": "~3.0.2",
+        "glob-parent": "~5.1.2",
+        "is-binary-path": "~2.1.0",
+        "is-glob": "~4.0.1",
+        "normalize-path": "~3.0.0",
+        "readdirp": "~3.6.0"
+      },
+      "engines": {
+        "node": ">= 8.10.0"
+      },
+      "funding": {
+        "url": "https://paulmillr.com/funding/"
+      },
+      "optionalDependencies": {
+        "fsevents": "~2.3.2"
+      }
+    },
+    "node_modules/chokidar/node_modules/glob-parent": {
+      "version": "5.1.2",
+      "resolved": "https://registry.npmjs.org/glob-parent/-/glob-parent-5.1.2.tgz",
+      "integrity": "sha512-AOIgSQCepiJYwP3ARnGx+5VnTu2HBYdzbGP45eLw1vr3zB3vZLeyed1sC9hnbcOc9/SrMyM5RPQrkGz4aS9Zow==",
+      "dev": true,
+      "license": "ISC",
+      "dependencies": {
+        "is-glob": "^4.0.1"
+      },
+      "engines": {
+        "node": ">= 6"
+      }
+    },
+    "node_modules/commander": {
+      "version": "4.1.1",
+      "resolved": "https://registry.npmjs.org/commander/-/commander-4.1.1.tgz",
+      "integrity": "sha512-NOKm8xhkzAjzFx8B2v5OAHT+u5pRQc2UCa2Vq9jYL/31o2wi9mxBA7LIFs3sV5VSC49z6pEhfbMULvShKj26WA==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">= 6"
+      }
+    },
+    "node_modules/convert-source-map": {
+      "version": "2.0.0",
+      "resolved": "https://registry.npmjs.org/convert-source-map/-/convert-source-map-2.0.0.tgz",
+      "integrity": "sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==",
+      "dev": true,
+      "license": "MIT"
+    },
+    "node_modules/cssesc": {
+      "version": "3.0.0",
+      "resolved": "https://registry.npmjs.org/cssesc/-/cssesc-3.0.0.tgz",
+      "integrity": "sha512-/Tb/JcjK111nNScGob5MNtsntNM1aCNUDipB/TkwZFhyDrrE47SOx/18wF2bbjgc3ZzCSKW1T5nt5EbFoAz/Vg==",
+      "dev": true,
+      "license": "MIT",
+      "bin": {
+        "cssesc": "bin/cssesc"
+      },
+      "engines": {
+        "node": ">=4"
+      }
+    },
+    "node_modules/csstype": {
+      "version": "3.2.3",
+      "resolved": "https://registry.npmjs.org/csstype/-/csstype-3.2.3.tgz",
+      "integrity": "sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ==",
+      "dev": true,
+      "license": "MIT"
+    },
+    "node_modules/debug": {
+      "version": "4.4.3",
+      "resolved": "https://registry.npmjs.org/debug/-/debug-4.4.3.tgz",
+      "integrity": "sha512-RGwwWnwQvkVfavKVt22FGLw+xYSdzARwm0ru6DhTVA3umU5hZc28V3kO4stgYryrTlLpuvgI9GiijltAjNbcqA==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "ms": "^2.1.3"
+      },
+      "engines": {
+        "node": ">=6.0"
+      },
+      "peerDependenciesMeta": {
+        "supports-color": {
+          "optional": true
+        }
+      }
+    },
+    "node_modules/didyoumean": {
+      "version": "1.2.2",
+      "resolved": "https://registry.npmjs.org/didyoumean/-/didyoumean-1.2.2.tgz",
+      "integrity": "sha512-gxtyfqMg7GKyhQmb056K7M3xszy/myH8w+B4RT+QXBQsvAOdc3XymqDDPHx1BgPgsdAA5SIifona89YtRATDzw==",
+      "dev": true,
+      "license": "Apache-2.0"
+    },
+    "node_modules/dlv": {
+      "version": "1.1.3",
+      "resolved": "https://registry.npmjs.org/dlv/-/dlv-1.1.3.tgz",
+      "integrity": "sha512-+HlytyjlPKnIG8XuRG8WvmBP8xs8P71y+SKKS6ZXWoEgLuePxtDoUEiH7WkdePWrQ5JBpE6aoVqfZfJUQkjXwA==",
+      "dev": true,
+      "license": "MIT"
+    },
+    "node_modules/electron-to-chromium": {
+      "version": "1.5.458",
+      "resolved": "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.5.458.tgz",
+      "integrity": "sha512-/hIH2gRSmxrf4/X4Nw/t/Wc8PVS22l8/3HnWjWTWsTOM5dsnMUPZF/+u+yr3LqweNuTBJE1rq6qAQzKkZVwMfA==",
+      "dev": true,
+      "license": "ISC"
+    },
+    "node_modules/es-errors": {
+      "version": "1.3.0",
+      "resolved": "https://registry.npmjs.org/es-errors/-/es-errors-1.3.0.tgz",
+      "integrity": "sha512-Zf5H2Kxt2xjTvbJvP2ZWLEICxA6j+hAmMzIlypy4xcBg1vKVnx89Wy0GbS+kf5cwCVFFzdCFh2XSCFNULS6csw==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">= 0.4"
+      }
+    },
+    "node_modules/esbuild": {
+      "version": "0.21.5",
+      "resolved": "https://registry.npmjs.org/esbuild/-/esbuild-0.21.5.tgz",
+      "integrity": "sha512-mg3OPMV4hXywwpoDxu3Qda5xCKQi+vCTZq8S9J/EpkhB2HzKXq4SNFZE3+NK93JYxc8VMSep+lOUSC/RVKaBqw==",
+      "dev": true,
+      "hasInstallScript": true,
+      "license": "MIT",
+      "bin": {
+        "esbuild": "bin/esbuild"
+      },
+      "engines": {
+        "node": ">=12"
+      },
+      "optionalDependencies": {
+        "@esbuild/aix-ppc64": "0.21.5",
+        "@esbuild/android-arm": "0.21.5",
+        "@esbuild/android-arm64": "0.21.5",
+        "@esbuild/android-x64": "0.21.5",
+        "@esbuild/darwin-arm64": "0.21.5",
+        "@esbuild/darwin-x64": "0.21.5",
+        "@esbuild/freebsd-arm64": "0.21.5",
+        "@esbuild/freebsd-x64": "0.21.5",
+        "@esbuild/linux-arm": "0.21.5",
+        "@esbuild/linux-arm64": "0.21.5",
+        "@esbuild/linux-ia32": "0.21.5",
+        "@esbuild/linux-loong64": "0.21.5",
+        "@esbuild/linux-mips64el": "0.21.5",
+        "@esbuild/linux-ppc64": "0.21.5",
+        "@esbuild/linux-riscv64": "0.21.5",
+        "@esbuild/linux-s390x": "0.21.5",
+        "@esbuild/linux-x64": "0.21.5",
+        "@esbuild/netbsd-x64": "0.21.5",
+        "@esbuild/openbsd-x64": "0.21.5",
+        "@esbuild/sunos-x64": "0.21.5",
+        "@esbuild/win32-arm64": "0.21.5",
+        "@esbuild/win32-ia32": "0.21.5",
+        "@esbuild/win32-x64": "0.21.5"
+      }
+    },
+    "node_modules/escalade": {
+      "version": "3.2.0",
+      "resolved": "https://registry.npmjs.org/escalade/-/escalade-3.2.0.tgz",
+      "integrity": "sha512-WUj2qlxaQtO4g6Pq5c29GTcWGDyd8itL8zTlipgECz3JesAiiOKotd8JU6otB3PACgG6xkJUyVhboMS+bje/jA==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=6"
+      }
+    },
+    "node_modules/fast-glob": {
+      "version": "3.3.3",
+      "resolved": "https://registry.npmjs.org/fast-glob/-/fast-glob-3.3.3.tgz",
+      "integrity": "sha512-7MptL8U0cqcFdzIzwOTHoilX9x5BrNqye7Z/LuC7kCMRio1EMSyqRK3BEAUD7sXRq4iT4AzTVuZdhgQ2TCvYLg==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@nodelib/fs.stat": "^2.0.2",
+        "@nodelib/fs.walk": "^1.2.3",
+        "glob-parent": "^5.1.2",
+        "merge2": "^1.3.0",
+        "micromatch": "^4.0.8"
+      },
+      "engines": {
+        "node": ">=8.6.0"
+      }
+    },
+    "node_modules/fast-glob/node_modules/glob-parent": {
+      "version": "5.1.2",
+      "resolved": "https://registry.npmjs.org/glob-parent/-/glob-parent-5.1.2.tgz",
+      "integrity": "sha512-AOIgSQCepiJYwP3ARnGx+5VnTu2HBYdzbGP45eLw1vr3zB3vZLeyed1sC9hnbcOc9/SrMyM5RPQrkGz4aS9Zow==",
+      "dev": true,
+      "license": "ISC",
+      "dependencies": {
+        "is-glob": "^4.0.1"
+      },
+      "engines": {
+        "node": ">= 6"
+      }
+    },
+    "node_modules/fastq": {
+      "version": "1.20.3",
+      "resolved": "https://registry.npmjs.org/fastq/-/fastq-1.20.3.tgz",
+      "integrity": "sha512-XKv5nnLs6nLF71NgiKJLIZFLkPyIEuOselLG7ujZnGrRfQK8HpvY+WqKhAJUAdLomwVHErVS4LfxFlPq0/FTAw==",
+      "dev": true,
+      "license": "ISC",
+      "dependencies": {
+        "reusify": "^1.0.4"
+      }
+    },
+    "node_modules/fill-range": {
+      "version": "7.1.1",
+      "resolved": "https://registry.npmjs.org/fill-range/-/fill-range-7.1.1.tgz",
+      "integrity": "sha512-YsGpe3WHLK8ZYi4tWDg2Jy3ebRz2rXowDxnld4bkQB00cc/1Zw9AWnC0i9ztDJitivtQvaI9KaLyKrc+hBW0yg==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "to-regex-range": "^5.0.1"
+      },
+      "engines": {
+        "node": ">=8"
+      }
+    },
+    "node_modules/fraction.js": {
+      "version": "5.3.4",
+      "resolved": "https://registry.npmjs.org/fraction.js/-/fraction.js-5.3.4.tgz",
+      "integrity": "sha512-1X1NTtiJphryn/uLQz3whtY6jK3fTqoE3ohKs0tT+Ujr1W59oopxmoEh7Lu5p6vBaPbgoM0bzveAW4Qi5RyWDQ==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": "*"
+      },
+      "funding": {
+        "type": "github",
+        "url": "https://github.com/sponsors/rawify"
+      }
+    },
+    "node_modules/fsevents": {
+      "version": "2.3.3",
+      "resolved": "https://registry.npmjs.org/fsevents/-/fsevents-2.3.3.tgz",
+      "integrity": "sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==",
+      "dev": true,
+      "hasInstallScript": true,
+      "license": "MIT",
+      "optional": true,
+      "os": [
+        "darwin"
+      ],
+      "engines": {
+        "node": "^8.16.0 || ^10.6.0 || >=11.0.0"
+      }
+    },
+    "node_modules/function-bind": {
+      "version": "1.1.2",
+      "resolved": "https://registry.npmjs.org/function-bind/-/function-bind-1.1.2.tgz",
+      "integrity": "sha512-7XHNxH7qX9xG5mIwxkhumTox/MIRNcOgDrxWsMt2pAr23WHp6MrRlN7FBSFpCpr+oVO0F744iUgR82nJMfG2SA==",
+      "dev": true,
+      "license": "MIT",
+      "funding": {
+        "url": "https://github.com/sponsors/ljharb"
+      }
+    },
+    "node_modules/gensync": {
+      "version": "1.0.0-beta.2",
+      "resolved": "https://registry.npmjs.org/gensync/-/gensync-1.0.0-beta.2.tgz",
+      "integrity": "sha512-3hN7NaskYvMDLQY55gnW3NQ+mesEAepTqlg+VEbj7zzqEMBVNhzcGYYeqFo/TlYz6eQiFcp1HcsCZO+nGgS8zg==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=6.9.0"
+      }
+    },
+    "node_modules/glob-parent": {
+      "version": "6.0.2",
+      "resolved": "https://registry.npmjs.org/glob-parent/-/glob-parent-6.0.2.tgz",
+      "integrity": "sha512-XxwI8EOhVQgWp6iDL+3b0r86f4d6AX6zSU55HfB4ydCEuXLXc5FcYeOu+nnGftS4TEju/11rt4KJPTMgbfmv4A==",
+      "dev": true,
+      "license": "ISC",
+      "dependencies": {
+        "is-glob": "^4.0.3"
+      },
+      "engines": {
+        "node": ">=10.13.0"
+      }
+    },
+    "node_modules/hasown": {
+      "version": "2.0.4",
+      "resolved": "https://registry.npmjs.org/hasown/-/hasown-2.0.4.tgz",
+      "integrity": "sha512-T2UbfbBEF32wiepXIsMlTW9+dDYC6wMh/t/vYA4tuOMKqWz/n3vr1NFSxQiyP+zk2mXsoMA/i/7qV6LKut1t1A==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "function-bind": "^1.1.2"
+      },
+      "engines": {
+        "node": ">= 0.4"
+      }
+    },
+    "node_modules/is-binary-path": {
+      "version": "2.1.0",
+      "resolved": "https://registry.npmjs.org/is-binary-path/-/is-binary-path-2.1.0.tgz",
+      "integrity": "sha512-ZMERYes6pDydyuGidse7OsHxtbI7WVeUEozgR/g7rd0xUimYNlvZRE/K2MgZTjWy725IfelLeVcEM97mmtRGXw==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "binary-extensions": "^2.0.0"
+      },
+      "engines": {
+        "node": ">=8"
+      }
+    },
+    "node_modules/is-core-module": {
+      "version": "2.17.0",
+      "resolved": "https://registry.npmjs.org/is-core-module/-/is-core-module-2.17.0.tgz",
+      "integrity": "sha512-J/vG0zBCbIKOQFfufSwyXdMrsohyJIUNkrnmo6WZGzoM7tr/lsbfW5b2BvisL6zsyMzK9UxV9L6c7AoFbyXHOA==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "hasown": "^2.0.4"
+      },
+      "engines": {
+        "node": ">= 0.4"
+      },
+      "funding": {
+        "url": "https://github.com/sponsors/ljharb"
+      }
+    },
+    "node_modules/is-extglob": {
+      "version": "2.1.1",
+      "resolved": "https://registry.npmjs.org/is-extglob/-/is-extglob-2.1.1.tgz",
+      "integrity": "sha512-SbKbANkN603Vi4jEZv49LeVJMn4yGwsbzZworEoyEiutsN3nJYdbO36zfhGJ6QEDpOZIFkDtnq5JRxmvl3jsoQ==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=0.10.0"
+      }
+    },
+    "node_modules/is-glob": {
+      "version": "4.0.3",
+      "resolved": "https://registry.npmjs.org/is-glob/-/is-glob-4.0.3.tgz",
+      "integrity": "sha512-xelSayHH36ZgE7ZWhli7pW34hNbNl8Ojv5KVmkJD4hBdD3th8Tfk9vYasLM+mXWOZhFkgZfxhLSnrwRr4elSSg==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "is-extglob": "^2.1.1"
+      },
+      "engines": {
+        "node": ">=0.10.0"
+      }
+    },
+    "node_modules/is-number": {
+      "version": "7.0.0",
+      "resolved": "https://registry.npmjs.org/is-number/-/is-number-7.0.0.tgz",
+      "integrity": "sha512-41Cifkg6e8TylSpdtTpeLVMqvSBEVzTttHvERD741+pnZ8ANv0004MRL43QKPDlK9cGvNp6NZWZUBlbGXYxxng==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=0.12.0"
+      }
+    },
+    "node_modules/jiti": {
+      "version": "1.21.7",
+      "resolved": "https://registry.npmjs.org/jiti/-/jiti-1.21.7.tgz",
+      "integrity": "sha512-/imKNG4EbWNrVjoNC/1H5/9GFy+tqjGBHCaSsN+P2RnPqjsLmv6UD3Ej+Kj8nBWaRAwyk7kK5ZUc+OEatnTR3A==",
+      "dev": true,
+      "license": "MIT",
+      "bin": {
+        "jiti": "bin/jiti.js"
+      }
+    },
+    "node_modules/js-tokens": {
+      "version": "4.0.0",
+      "resolved": "https://registry.npmjs.org/js-tokens/-/js-tokens-4.0.0.tgz",
+      "integrity": "sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==",
+      "license": "MIT"
+    },
+    "node_modules/jsesc": {
+      "version": "3.1.0",
+      "resolved": "https://registry.npmjs.org/jsesc/-/jsesc-3.1.0.tgz",
+      "integrity": "sha512-/sM3dO2FOzXjKQhJuo0Q173wf2KOo8t4I8vHy6lF9poUp7bKT0/NHE8fPX23PwfhnykfqnC2xRxOnVw5XuGIaA==",
+      "dev": true,
+      "license": "MIT",
+      "bin": {
+        "jsesc": "bin/jsesc"
+      },
+      "engines": {
+        "node": ">=6"
+      }
+    },
+    "node_modules/json5": {
+      "version": "2.2.3",
+      "resolved": "https://registry.npmjs.org/json5/-/json5-2.2.3.tgz",
+      "integrity": "sha512-XmOWe7eyHYH14cLdVPoyg+GOH3rYX++KpzrylJwSW98t3Nk+U8XOl8FWKOgwtzdb8lXGf6zYwDUzeHMWfxasyg==",
+      "dev": true,
+      "license": "MIT",
+      "bin": {
+        "json5": "lib/cli.js"
+      },
+      "engines": {
+        "node": ">=6"
+      }
+    },
+    "node_modules/lilconfig": {
+      "version": "3.1.4",
+      "resolved": "https://registry.npmjs.org/lilconfig/-/lilconfig-3.1.4.tgz",
+      "integrity": "sha512-zJZyBmQhArDRefuWTypZxwDpFDIYmrj8ypSBvwGD5P13Y95s6DjzKgu4DVdGbeQa5PDEsAOCAPNk4X+QOR006w==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=14"
+      },
+      "funding": {
+        "url": "https://github.com/sponsors/antonk52"
+      }
+    },
+    "node_modules/lines-and-columns": {
+      "version": "1.2.4",
+      "resolved": "https://registry.npmjs.org/lines-and-columns/-/lines-and-columns-1.2.4.tgz",
+      "integrity": "sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==",
+      "dev": true,
+      "license": "MIT"
+    },
+    "node_modules/loose-envify": {
+      "version": "1.4.0",
+      "resolved": "https://registry.npmjs.org/loose-envify/-/loose-envify-1.4.0.tgz",
+      "integrity": "sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==",
+      "license": "MIT",
+      "dependencies": {
+        "js-tokens": "^3.0.0 || ^4.0.0"
+      },
+      "bin": {
+        "loose-envify": "cli.js"
+      }
+    },
+    "node_modules/lru-cache": {
+      "version": "5.1.1",
+      "resolved": "https://registry.npmjs.org/lru-cache/-/lru-cache-5.1.1.tgz",
+      "integrity": "sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==",
+      "dev": true,
+      "license": "ISC",
+      "dependencies": {
+        "yallist": "^3.0.2"
+      }
+    },
+    "node_modules/lucide-react": {
+      "version": "0.468.0",
+      "resolved": "https://registry.npmjs.org/lucide-react/-/lucide-react-0.468.0.tgz",
+      "integrity": "sha512-6koYRhnM2N0GGZIdXzSeiNwguv1gt/FAjZOiPl76roBi3xKEXa4WmfpxgQwTTL4KipXjefrnf3oV4IsYhi4JFA==",
+      "license": "ISC",
+      "peerDependencies": {
+        "react": "^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0-rc"
+      }
+    },
+    "node_modules/merge2": {
+      "version": "1.4.1",
+      "resolved": "https://registry.npmjs.org/merge2/-/merge2-1.4.1.tgz",
+      "integrity": "sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">= 8"
+      }
+    },
+    "node_modules/micromatch": {
+      "version": "4.0.8",
+      "resolved": "https://registry.npmjs.org/micromatch/-/micromatch-4.0.8.tgz",
+      "integrity": "sha512-PXwfBhYu0hBCPw8Dn0E+WDYb7af3dSLVWKi3HGv84IdF4TyFoC0ysxFd0Goxw7nSv4T/PzEJQxsYsEiFCKo2BA==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "braces": "^3.0.3",
+        "picomatch": "^2.3.1"
+      },
+      "engines": {
+        "node": ">=8.6"
+      }
+    },
+    "node_modules/ms": {
+      "version": "2.1.3",
+      "resolved": "https://registry.npmjs.org/ms/-/ms-2.1.3.tgz",
+      "integrity": "sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==",
+      "dev": true,
+      "license": "MIT"
+    },
+    "node_modules/mz": {
+      "version": "2.7.0",
+      "resolved": "https://registry.npmjs.org/mz/-/mz-2.7.0.tgz",
+      "integrity": "sha512-z81GNO7nnYMEhrGh9LeymoE4+Yr0Wn5McHIZMK5cfQCl+NDX08sCZgUc9/6MHni9IWuFLm1Z3HTCXu2z9fN62Q==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "any-promise": "^1.0.0",
+        "object-assign": "^4.0.1",
+        "thenify-all": "^1.0.0"
+      }
+    },
+    "node_modules/nanoid": {
+      "version": "3.3.20",
+      "resolved": "https://registry.npmjs.org/nanoid/-/nanoid-3.3.20.tgz",
+      "integrity": "sha512-uKdg2G3GNCKQn9byYOpxbGqrT2fGO5KRt5J/8b3pok8rT6qxGWF6hxMyJiEYtAf+FVyYuD9hRaDqX5uPFYJ4ZQ==",
+      "dev": true,
+      "funding": [
+        {
+          "type": "github",
+          "url": "https://github.com/sponsors/ai"
+        }
+      ],
+      "license": "MIT",
+      "bin": {
+        "nanoid": "bin/nanoid.cjs"
+      },
+      "engines": {
+        "node": "^10 || ^12 || ^13.7 || ^14 || >=15.0.1"
+      }
+    },
+    "node_modules/node-releases": {
+      "version": "2.0.59",
+      "resolved": "https://registry.npmjs.org/node-releases/-/node-releases-2.0.59.tgz",
+      "integrity": "sha512-5qr2okC4ItAI0hG5SaV0HoYMpnM/Y6+Oqr7AmPYy/2uEoGvS+GbSKLeRxSS1uAdu59yz0ouzcuXievSgg///WA==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=18"
+      }
+    },
+    "node_modules/normalize-path": {
+      "version": "3.0.0",
+      "resolved": "https://registry.npmjs.org/normalize-path/-/normalize-path-3.0.0.tgz",
+      "integrity": "sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=0.10.0"
+      }
+    },
+    "node_modules/object-assign": {
+      "version": "4.1.1",
+      "resolved": "https://registry.npmjs.org/object-assign/-/object-assign-4.1.1.tgz",
+      "integrity": "sha512-rJgTQnkUnH1sFw8yT6VSU3zD3sWmu6sZhIseY8VX+GRu3P6F7Fu+JNDoXfklElbLJSnc3FUQHVe4cU5hj+BcUg==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=0.10.0"
+      }
+    },
+    "node_modules/object-hash": {
+      "version": "3.0.0",
+      "resolved": "https://registry.npmjs.org/object-hash/-/object-hash-3.0.0.tgz",
+      "integrity": "sha512-RSn9F68PjH9HqtltsSnqYC1XXoWe9Bju5+213R98cNGttag9q9yAOTzdbsqvIa7aNm5WffBZFpWYr2aWrklWAw==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">= 6"
+      }
+    },
+    "node_modules/path-parse": {
+      "version": "1.0.7",
+      "resolved": "https://registry.npmjs.org/path-parse/-/path-parse-1.0.7.tgz",
+      "integrity": "sha512-LDJzPVEEEPR+y48z93A0Ed0yXb8pAByGWo/k5YYdYgpY2/2EsOsksJrq7lOHxryrVOn1ejG6oAp8ahvOIQD8sw==",
+      "dev": true,
+      "license": "MIT"
+    },
+    "node_modules/picocolors": {
+      "version": "1.1.1",
+      "resolved": "https://registry.npmjs.org/picocolors/-/picocolors-1.1.1.tgz",
+      "integrity": "sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==",
+      "dev": true,
+      "license": "ISC"
+    },
+    "node_modules/picomatch": {
+      "version": "2.3.2",
+      "resolved": "https://registry.npmjs.org/picomatch/-/picomatch-2.3.2.tgz",
+      "integrity": "sha512-V7+vQEJ06Z+c5tSye8S+nHUfI51xoXIXjHQ99cQtKUkQqqO1kO/KCJUfZXuB47h/YBlDhah2H3hdUGXn8ie0oA==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=8.6"
+      },
+      "funding": {
+        "url": "https://github.com/sponsors/jonschlinkert"
+      }
+    },
+    "node_modules/pirates": {
+      "version": "4.0.7",
+      "resolved": "https://registry.npmjs.org/pirates/-/pirates-4.0.7.tgz",
+      "integrity": "sha512-TfySrs/5nm8fQJDcBDuUng3VOUKsd7S+zqvbOTiGXHfxX4wK31ard+hoNuvkicM/2YFzlpDgABOevKSsB4G/FA==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">= 6"
+      }
+    },
+    "node_modules/postcss": {
+      "version": "8.5.30",
+      "resolved": "https://registry.npmjs.org/postcss/-/postcss-8.5.30.tgz",
+      "integrity": "sha512-zkd+e9S1AQHhmaBKye9zlFHWjOwVgqXl1q3ECYy8561K7qxR2cREf/STLskulBFd78k6AOFeA+ff1TtEzk9bAA==",
+      "dev": true,
+      "funding": [
+        {
+          "type": "opencollective",
+          "url": "https://opencollective.com/postcss/"
+        },
+        {
+          "type": "tidelift",
+          "url": "https://tidelift.com/funding/github/npm/postcss"
+        },
+        {
+          "type": "github",
+          "url": "https://github.com/sponsors/ai"
+        }
+      ],
+      "license": "MIT",
+      "dependencies": {
+        "nanoid": "^3.3.20",
+        "picocolors": "^1.1.1",
+        "source-map-js": "^1.2.2"
+      },
+      "engines": {
+        "node": "^10 || ^12 || >=14"
+      }
+    },
+    "node_modules/postcss-import": {
+      "version": "15.1.0",
+      "resolved": "https://registry.npmjs.org/postcss-import/-/postcss-import-15.1.0.tgz",
+      "integrity": "sha512-hpr+J05B2FVYUAXHeK1YyI267J/dDDhMU6B6civm8hSY1jYJnBXxzKDKDswzJmtLHryrjhnDjqqp/49t8FALew==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "postcss-value-parser": "^4.0.0",
+        "read-cache": "^1.0.0",
+        "resolve": "^1.1.7"
+      },
+      "engines": {
+        "node": ">=14.0.0"
+      },
+      "peerDependencies": {
+        "postcss": "^8.0.0"
+      }
+    },
+    "node_modules/postcss-js": {
+      "version": "4.1.0",
+      "resolved": "https://registry.npmjs.org/postcss-js/-/postcss-js-4.1.0.tgz",
+      "integrity": "sha512-oIAOTqgIo7q2EOwbhb8UalYePMvYoIeRY2YKntdpFQXNosSu3vLrniGgmH9OKs/qAkfoj5oB3le/7mINW1LCfw==",
+      "dev": true,
+      "funding": [
+        {
+          "type": "opencollective",
+          "url": "https://opencollective.com/postcss/"
+        },
+        {
+          "type": "github",
+          "url": "https://github.com/sponsors/ai"
+        }
+      ],
+      "license": "MIT",
+      "dependencies": {
+        "camelcase-css": "^2.0.1"
+      },
+      "engines": {
+        "node": "^12 || ^14 || >= 16"
+      },
+      "peerDependencies": {
+        "postcss": "^8.4.21"
+      }
+    },
+    "node_modules/postcss-load-config": {
+      "version": "6.0.1",
+      "resolved": "https://registry.npmjs.org/postcss-load-config/-/postcss-load-config-6.0.1.tgz",
+      "integrity": "sha512-oPtTM4oerL+UXmx+93ytZVN82RrlY/wPUV8IeDxFrzIjXOLF1pN+EmKPLbubvKHT2HC20xXsCAH2Z+CKV6Oz/g==",
+      "dev": true,
+      "funding": [
+        {
+          "type": "opencollective",
+          "url": "https://opencollective.com/postcss/"
+        },
+        {
+          "type": "github",
+          "url": "https://github.com/sponsors/ai"
+        }
+      ],
+      "license": "MIT",
+      "dependencies": {
+        "lilconfig": "^3.1.1"
+      },
+      "engines": {
+        "node": ">= 18"
+      },
+      "peerDependencies": {
+        "jiti": ">=1.21.0",
+        "postcss": ">=8.0.9",
+        "tsx": "^4.8.1",
+        "yaml": "^2.4.2"
+      },
+      "peerDependenciesMeta": {
+        "jiti": {
+          "optional": true
+        },
+        "postcss": {
+          "optional": true
+        },
+        "tsx": {
+          "optional": true
+        },
+        "yaml": {
+          "optional": true
+        }
+      }
+    },
+    "node_modules/postcss-nested": {
+      "version": "6.2.0",
+      "resolved": "https://registry.npmjs.org/postcss-nested/-/postcss-nested-6.2.0.tgz",
+      "integrity": "sha512-HQbt28KulC5AJzG+cZtj9kvKB93CFCdLvog1WFLf1D+xmMvPGlBstkpTEZfK5+AN9hfJocyBFCNiqyS48bpgzQ==",
+      "dev": true,
+      "funding": [
+        {
+          "type": "opencollective",
+          "url": "https://opencollective.com/postcss/"
+        },
+        {
+          "type": "github",
+          "url": "https://github.com/sponsors/ai"
+        }
+      ],
+      "license": "MIT",
+      "dependencies": {
+        "postcss-selector-parser": "^6.1.1"
+      },
+      "engines": {
+        "node": ">=12.0"
+      },
+      "peerDependencies": {
+        "postcss": "^8.2.14"
+      }
+    },
+    "node_modules/postcss-selector-parser": {
+      "version": "6.1.4",
+      "resolved": "https://registry.npmjs.org/postcss-selector-parser/-/postcss-selector-parser-6.1.4.tgz",
+      "integrity": "sha512-bIoJLOmjCO1S9XdY/DcnR5hJxvrDir1PbGChrzXG3vw0/FOliy/fA3dmdhQ441kah4gKv+TwckGzex6wNS5cnQ==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "cssesc": "^3.0.0",
+        "util-deprecate": "^1.0.2"
+      },
+      "engines": {
+        "node": ">=4"
+      }
+    },
+    "node_modules/postcss-value-parser": {
+      "version": "4.2.0",
+      "resolved": "https://registry.npmjs.org/postcss-value-parser/-/postcss-value-parser-4.2.0.tgz",
+      "integrity": "sha512-1NNCs6uurfkVbeXG4S8JFT9t19m45ICnif8zWLd5oPSZ50QnwMfK+H3jv408d4jw/7Bttv5axS5IiHoLaVNHeQ==",
+      "dev": true,
+      "license": "MIT"
+    },
+    "node_modules/queue-microtask": {
+      "version": "1.2.3",
+      "resolved": "https://registry.npmjs.org/queue-microtask/-/queue-microtask-1.2.3.tgz",
+      "integrity": "sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==",
+      "dev": true,
+      "funding": [
+        {
+          "type": "github",
+          "url": "https://github.com/sponsors/feross"
+        },
+        {
+          "type": "patreon",
+          "url": "https://www.patreon.com/feross"
+        },
+        {
+          "type": "consulting",
+          "url": "https://feross.org/support"
+        }
+      ],
+      "license": "MIT"
+    },
+    "node_modules/react": {
+      "version": "18.3.1",
+      "resolved": "https://registry.npmjs.org/react/-/react-18.3.1.tgz",
+      "integrity": "sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==",
+      "license": "MIT",
+      "dependencies": {
+        "loose-envify": "^1.1.0"
+      },
+      "engines": {
+        "node": ">=0.10.0"
+      }
+    },
+    "node_modules/react-dom": {
+      "version": "18.3.1",
+      "resolved": "https://registry.npmjs.org/react-dom/-/react-dom-18.3.1.tgz",
+      "integrity": "sha512-5m4nQKp+rZRb09LNH59GM4BxTh9251/ylbKIbpe7TpGxfJ+9kv6BLkLBXIjjspbgbnIBNqlI23tRnTWT0snUIw==",
+      "license": "MIT",
+      "dependencies": {
+        "loose-envify": "^1.1.0",
+        "scheduler": "^0.23.2"
+      },
+      "peerDependencies": {
+        "react": "^18.3.1"
+      }
+    },
+    "node_modules/react-refresh": {
+      "version": "0.17.0",
+      "resolved": "https://registry.npmjs.org/react-refresh/-/react-refresh-0.17.0.tgz",
+      "integrity": "sha512-z6F7K9bV85EfseRCp2bzrpyQ0Gkw1uLoCel9XBVWPg/TjRj94SkJzUTGfOa4bs7iJvBWtQG0Wq7wnI0syw3EBQ==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=0.10.0"
+      }
+    },
+    "node_modules/read-cache": {
+      "version": "1.0.2",
+      "resolved": "https://registry.npmjs.org/read-cache/-/read-cache-1.0.2.tgz",
+      "integrity": "sha512-/peqiBB/n07gQGLsWaHho3WfvUyRscw0gYTsEFMhrIe/nWLkYaf5SbKYjGYqtRV3aPwykJgF2VEMo1ac4bnsGA==",
+      "dev": true,
+      "license": "MIT"
+    },
+    "node_modules/readdirp": {
+      "version": "3.6.0",
+      "resolved": "https://registry.npmjs.org/readdirp/-/readdirp-3.6.0.tgz",
+      "integrity": "sha512-hOS089on8RduqdbhvQ5Z37A0ESjsqz6qnRcffsMU3495FuTdqSm+7bhJ29JvIOsBDEEnan5DPu9t3To9VRlMzA==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "picomatch": "^2.2.1"
+      },
+      "engines": {
+        "node": ">=8.10.0"
+      }
+    },
+    "node_modules/resolve": {
+      "version": "1.22.13",
+      "resolved": "https://registry.npmjs.org/resolve/-/resolve-1.22.13.tgz",
+      "integrity": "sha512-Dj/cW9zBV2aRj6XzCxuGIs3ESZKv02jixne3q6jFZYZ3/Tg09gHHviSMDL4kObh9pqSahdRHEnDoaP2gn8YLhA==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "es-errors": "^1.3.0",
+        "is-core-module": "^2.17.0",
+        "path-parse": "^1.0.7",
+        "supports-preserve-symlinks-flag": "^1.0.0"
+      },
+      "bin": {
+        "resolve": "bin/resolve"
+      },
+      "engines": {
+        "node": ">= 0.4"
+      },
+      "funding": {
+        "url": "https://github.com/sponsors/ljharb"
+      }
+    },
+    "node_modules/reusify": {
+      "version": "1.1.0",
+      "resolved": "https://registry.npmjs.org/reusify/-/reusify-1.1.0.tgz",
+      "integrity": "sha512-g6QUff04oZpHs0eG5p83rFLhHeV00ug/Yf9nZM6fLeUrPguBTkTQOdpAWWspMh55TZfVQDPaN3NQJfbVRAxdIw==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "iojs": ">=1.0.0",
+        "node": ">=0.10.0"
+      }
+    },
+    "node_modules/rollup": {
+      "version": "4.64.7",
+      "resolved": "https://registry.npmjs.org/rollup/-/rollup-4.64.7.tgz",
+      "integrity": "sha512-aCiJONoZp0lNGJ6sYqspLkh6UXaWEey/7Ko2TZyXQ4kgzAhDUxAgbt/oulXKmD+zFHXw1k+RF6ZZWOrjp7DZnQ==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@types/estree": "1.0.9"
+      },
+      "bin": {
+        "rollup": "dist/bin/rollup"
+      },
+      "engines": {
+        "node": ">=18.0.0",
+        "npm": ">=8.0.0"
+      },
+      "optionalDependencies": {
+        "@napi-rs/lzma-linux-x64-gnu": "1.5.1",
+        "@rollup/rollup-android-arm-eabi": "4.64.7",
+        "@rollup/rollup-android-arm64": "4.64.7",
+        "@rollup/rollup-darwin-arm64": "4.64.7",
+        "@rollup/rollup-darwin-x64": "4.64.7",
+        "@rollup/rollup-freebsd-arm64": "4.64.7",
+        "@rollup/rollup-freebsd-x64": "4.64.7",
+        "@rollup/rollup-linux-arm-gnueabihf": "4.64.7",
+        "@rollup/rollup-linux-arm-musleabihf": "4.64.7",
+        "@rollup/rollup-linux-arm64-gnu": "4.64.7",
+        "@rollup/rollup-linux-arm64-musl": "4.64.7",
+        "@rollup/rollup-linux-loong64-gnu": "4.64.7",
+        "@rollup/rollup-linux-loong64-musl": "4.64.7",
+        "@rollup/rollup-linux-ppc64-gnu": "4.64.7",
+        "@rollup/rollup-linux-ppc64-musl": "4.64.7",
+        "@rollup/rollup-linux-riscv64-gnu": "4.64.7",
+        "@rollup/rollup-linux-riscv64-musl": "4.64.7",
+        "@rollup/rollup-linux-s390x-gnu": "4.64.7",
+        "@rollup/rollup-linux-x64-gnu": "4.64.7",
+        "@rollup/rollup-linux-x64-musl": "4.64.7",
+        "@rollup/rollup-openbsd-x64": "4.64.7",
+        "@rollup/rollup-openharmony-arm64": "4.64.7",
+        "@rollup/rollup-win32-arm64-msvc": "4.64.7",
+        "@rollup/rollup-win32-ia32-msvc": "4.64.7",
+        "@rollup/rollup-win32-x64-gnu": "4.64.7",
+        "@rollup/rollup-win32-x64-msvc": "4.64.7",
+        "fsevents": "~2.3.2"
+      }
+    },
+    "node_modules/run-parallel": {
+      "version": "1.2.0",
+      "resolved": "https://registry.npmjs.org/run-parallel/-/run-parallel-1.2.0.tgz",
+      "integrity": "sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA==",
+      "dev": true,
+      "funding": [
+        {
+          "type": "github",
+          "url": "https://github.com/sponsors/feross"
+        },
+        {
+          "type": "patreon",
+          "url": "https://www.patreon.com/feross"
+        },
+        {
+          "type": "consulting",
+          "url": "https://feross.org/support"
+        }
+      ],
+      "license": "MIT",
+      "dependencies": {
+        "queue-microtask": "^1.2.2"
+      }
+    },
+    "node_modules/scheduler": {
+      "version": "0.23.2",
+      "resolved": "https://registry.npmjs.org/scheduler/-/scheduler-0.23.2.tgz",
+      "integrity": "sha512-UOShsPwz7NrMUqhR6t0hWjFduvOzbtv7toDH1/hIrfRNIDBnnBWd0CwJTGvTpngVlmwGCdP9/Zl/tVrDqcuYzQ==",
+      "license": "MIT",
+      "dependencies": {
+        "loose-envify": "^1.1.0"
+      }
+    },
+    "node_modules/semver": {
+      "version": "6.3.1",
+      "resolved": "https://registry.npmjs.org/semver/-/semver-6.3.1.tgz",
+      "integrity": "sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA==",
+      "dev": true,
+      "license": "ISC",
+      "bin": {
+        "semver": "bin/semver.js"
+      }
+    },
+    "node_modules/shaders": {
+      "version": "4.0.4",
+      "resolved": "https://registry.npmjs.org/shaders/-/shaders-4.0.4.tgz",
+      "integrity": "sha512-NB+/RiK0oydteeeKdPqsLpR3iSoDTvt8bsdgw2wPb697QVCY/yadZV8gitCyCQx5t/kb4nJicIR+cbG9Q6JFfQ==",
+      "license": "MIT",
+      "dependencies": {
+        "typegpu": "0.12.3"
+      },
+      "bin": {
+        "shaders": "dist/cli.js"
+      },
+      "peerDependencies": {
+        "react": "^18.0.0 || ^19.0.0",
+        "react-dom": "^18.0.0 || ^19.0.0",
+        "solid-js": "^1.8.0",
+        "svelte": "^5",
+        "vue": "^3.5.0"
+      },
+      "peerDependenciesMeta": {
+        "react": {
+          "optional": true
+        },
+        "react-dom": {
+          "optional": true
+        },
+        "solid-js": {
+          "optional": true
+        },
+        "svelte": {
+          "optional": true
+        },
+        "vue": {
+          "optional": true
+        }
+      }
+    },
+    "node_modules/source-map-js": {
+      "version": "1.2.2",
+      "resolved": "https://registry.npmjs.org/source-map-js/-/source-map-js-1.2.2.tgz",
+      "integrity": "sha512-KGj/8Y43x35aZVDtt+J4mK1hoLGHULMYfSkODJNQjNDC3oW1PqPoxMwo0pLUsWM/UEGzON/NxeHywEfNXNP3Vw==",
+      "dev": true,
+      "license": "BSD-3-Clause",
+      "engines": {
+        "node": ">=0.10.0"
+      }
+    },
+    "node_modules/sucrase": {
+      "version": "3.35.1",
+      "resolved": "https://registry.npmjs.org/sucrase/-/sucrase-3.35.1.tgz",
+      "integrity": "sha512-DhuTmvZWux4H1UOnWMB3sk0sbaCVOoQZjv8u1rDoTV0HTdGem9hkAZtl4JZy8P2z4Bg0nT+YMeOFyVr4zcG5Tw==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@jridgewell/gen-mapping": "^0.3.2",
+        "commander": "^4.0.0",
+        "lines-and-columns": "^1.1.6",
+        "mz": "^2.7.0",
+        "pirates": "^4.0.1",
+        "tinyglobby": "^0.2.11",
+        "ts-interface-checker": "^0.1.9"
+      },
+      "bin": {
+        "sucrase": "bin/sucrase",
+        "sucrase-node": "bin/sucrase-node"
+      },
+      "engines": {
+        "node": ">=16 || 14 >=14.17"
+      }
+    },
+    "node_modules/supports-preserve-symlinks-flag": {
+      "version": "1.0.0",
+      "resolved": "https://registry.npmjs.org/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz",
+      "integrity": "sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">= 0.4"
+      },
+      "funding": {
+        "url": "https://github.com/sponsors/ljharb"
+      }
+    },
+    "node_modules/tailwindcss": {
+      "version": "3.4.19",
+      "resolved": "https://registry.npmjs.org/tailwindcss/-/tailwindcss-3.4.19.tgz",
+      "integrity": "sha512-3ofp+LL8E+pK/JuPLPggVAIaEuhvIz4qNcf3nA1Xn2o/7fb7s/TYpHhwGDv1ZU3PkBluUVaF8PyCHcm48cKLWQ==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "@alloc/quick-lru": "^5.2.0",
+        "arg": "^5.0.2",
+        "chokidar": "^3.6.0",
+        "didyoumean": "^1.2.2",
+        "dlv": "^1.1.3",
+        "fast-glob": "^3.3.2",
+        "glob-parent": "^6.0.2",
+        "is-glob": "^4.0.3",
+        "jiti": "^1.21.7",
+        "lilconfig": "^3.1.3",
+        "micromatch": "^4.0.8",
+        "normalize-path": "^3.0.0",
+        "object-hash": "^3.0.0",
+        "picocolors": "^1.1.1",
+        "postcss": "^8.4.47",
+        "postcss-import": "^15.1.0",
+        "postcss-js": "^4.0.1",
+        "postcss-load-config": "^4.0.2 || ^5.0 || ^6.0",
+        "postcss-nested": "^6.2.0",
+        "postcss-selector-parser": "^6.1.2",
+        "resolve": "^1.22.8",
+        "sucrase": "^3.35.0"
+      },
+      "bin": {
+        "tailwind": "lib/cli.js",
+        "tailwindcss": "lib/cli.js"
+      },
+      "engines": {
+        "node": ">=14.0.0"
+      }
+    },
+    "node_modules/thenify": {
+      "version": "3.3.1",
+      "resolved": "https://registry.npmjs.org/thenify/-/thenify-3.3.1.tgz",
+      "integrity": "sha512-RVZSIV5IG10Hk3enotrhvz0T9em6cyHBLkH/YAZuKqd8hRkKhSfCGIcP2KUY0EPxndzANBmNllzWPwak+bheSw==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "any-promise": "^1.0.0"
+      }
+    },
+    "node_modules/thenify-all": {
+      "version": "1.6.0",
+      "resolved": "https://registry.npmjs.org/thenify-all/-/thenify-all-1.6.0.tgz",
+      "integrity": "sha512-RNxQH/qI8/t3thXJDwcstUO4zeqo64+Uy/+sNVRBx4Xn2OX+OZ9oP+iJnNFqplFra2ZUVeKCSa2oVWi3T4uVmA==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "thenify": ">= 3.1.0 < 4"
+      },
+      "engines": {
+        "node": ">=0.8"
+      }
+    },
+    "node_modules/tinyest": {
+      "version": "0.3.4",
+      "resolved": "https://registry.npmjs.org/tinyest/-/tinyest-0.3.4.tgz",
+      "integrity": "sha512-81EcMHTCQ2IPweOGk9SpMgjbenR9ZJRsAE84btEv0DhvVKwhe7qBy28hWgatoXa9ppWzmtpHiJ+e86SiaAtY6w==",
+      "license": "MIT",
+      "engines": {
+        "node": ">=12.20.0"
+      }
+    },
+    "node_modules/tinyglobby": {
+      "version": "0.2.17",
+      "resolved": "https://registry.npmjs.org/tinyglobby/-/tinyglobby-0.2.17.tgz",
+      "integrity": "sha512-wXR/dYpcqKmfWpEdZjiKJOwCNFndD0DMnrW/cYjVGttEkBfVgcLFHoNrlj47mjOVic9yyNu65alsgF4NQyTa2g==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "fdir": "^6.5.0",
+        "picomatch": "^4.0.4"
+      },
+      "engines": {
+        "node": ">=12.0.0"
+      },
+      "funding": {
+        "url": "https://github.com/sponsors/SuperchupuDev"
+      }
+    },
+    "node_modules/tinyglobby/node_modules/fdir": {
+      "version": "6.5.0",
+      "resolved": "https://registry.npmjs.org/fdir/-/fdir-6.5.0.tgz",
+      "integrity": "sha512-tIbYtZbucOs0BRGqPJkshJUYdL+SDH7dVM8gjy+ERp3WAUjLEFJE+02kanyHtwjWOnwrKYBiwAmM0p4kLJAnXg==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=12.0.0"
+      },
+      "peerDependencies": {
+        "picomatch": "^3 || ^4"
+      },
+      "peerDependenciesMeta": {
+        "picomatch": {
+          "optional": true
+        }
+      }
+    },
+    "node_modules/tinyglobby/node_modules/picomatch": {
+      "version": "4.0.7",
+      "resolved": "https://registry.npmjs.org/picomatch/-/picomatch-4.0.7.tgz",
+      "integrity": "sha512-qcJu88Q2IWqJsDD529JKMdwGm/dvInW4HvQnRwiH9JtihJvzGOscDtHE3x1pBKeUOTysQ8kVmLnJ2kJu7yhcGA==",
+      "dev": true,
+      "license": "MIT",
+      "engines": {
+        "node": ">=12"
+      },
+      "funding": {
+        "url": "https://github.com/sponsors/jonschlinkert"
+      }
+    },
+    "node_modules/to-regex-range": {
+      "version": "5.0.1",
+      "resolved": "https://registry.npmjs.org/to-regex-range/-/to-regex-range-5.0.1.tgz",
+      "integrity": "sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "is-number": "^7.0.0"
+      },
+      "engines": {
+        "node": ">=8.0"
+      }
+    },
+    "node_modules/ts-interface-checker": {
+      "version": "0.1.13",
+      "resolved": "https://registry.npmjs.org/ts-interface-checker/-/ts-interface-checker-0.1.13.tgz",
+      "integrity": "sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==",
+      "dev": true,
+      "license": "Apache-2.0"
+    },
+    "node_modules/tsover-runtime": {
+      "version": "0.0.7",
+      "resolved": "https://registry.npmjs.org/tsover-runtime/-/tsover-runtime-0.0.7.tgz",
+      "integrity": "sha512-FHHwMJzZbnP23+fU1PxXljy7j0RRRosL2r1/CRUNTqfW+l7m35JsUkM615x/cAzw4GqRdXPIl3axKMj9qzpZtQ==",
+      "license": "Apache-2.0"
+    },
+    "node_modules/typed-binary": {
+      "version": "4.3.3",
+      "resolved": "https://registry.npmjs.org/typed-binary/-/typed-binary-4.3.3.tgz",
+      "integrity": "sha512-W2hLsSzt3k/tg38gDE4Fn/QiwcoqGuUHBc2cb3mXuH7KcYxe/GM57vzW14s2/bawB4R5knGgGq8Xb57vsaJ4Sg==",
+      "license": "MIT"
+    },
+    "node_modules/typegpu": {
+      "version": "0.12.3",
+      "resolved": "https://registry.npmjs.org/typegpu/-/typegpu-0.12.3.tgz",
+      "integrity": "sha512-zYwQEhnPPwhq5vQKmollXRK1LCVjStOnL+2B0PiebqvAzYPr25rPNR4r3olLoow5sKKjyj3kzHKEcpD5SyDzGQ==",
+      "license": "MIT",
+      "dependencies": {
+        "tinyest": "~0.3.2",
+        "tsover-runtime": "^0.0.7",
+        "typed-binary": "^4.3.3"
+      },
+      "bin": {
+        "typegpu": "bin.mjs"
+      },
+      "engines": {
+        "node": ">=12.20.0"
+      }
+    },
+    "node_modules/typescript": {
+      "version": "5.9.3",
+      "resolved": "https://registry.npmjs.org/typescript/-/typescript-5.9.3.tgz",
+      "integrity": "sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==",
+      "dev": true,
+      "license": "Apache-2.0",
+      "bin": {
+        "tsc": "bin/tsc",
+        "tsserver": "bin/tsserver"
+      },
+      "engines": {
+        "node": ">=14.17"
+      }
+    },
+    "node_modules/update-browserslist-db": {
+      "version": "1.3.4",
+      "resolved": "https://registry.npmjs.org/update-browserslist-db/-/update-browserslist-db-1.3.4.tgz",
+      "integrity": "sha512-t8wonIOdQyOjtPd2VktlBu6QjTVTks6v8bSi7kd0r2Vll8TK1JYDZtRRdbmCHOAMphkZgrzK+L+vXK4pyZ8t4A==",
+      "dev": true,
+      "funding": [
+        {
+          "type": "opencollective",
+          "url": "https://opencollective.com/browserslist"
+        },
+        {
+          "type": "tidelift",
+          "url": "https://tidelift.com/funding/github/npm/browserslist"
+        },
+        {
+          "type": "github",
+          "url": "https://github.com/sponsors/ai"
+        }
+      ],
+      "license": "MIT",
+      "dependencies": {
+        "escalade": "^3.2.0",
+        "picocolors": "^1.1.1"
+      },
+      "bin": {
+        "update-browserslist-db": "cli.js"
+      },
+      "peerDependencies": {
+        "browserslist": ">= 4.21.0"
+      }
+    },
+    "node_modules/util-deprecate": {
+      "version": "1.0.2",
+      "resolved": "https://registry.npmjs.org/util-deprecate/-/util-deprecate-1.0.2.tgz",
+      "integrity": "sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==",
+      "dev": true,
+      "license": "MIT"
+    },
+    "node_modules/vite": {
+      "version": "5.4.21",
+      "resolved": "https://registry.npmjs.org/vite/-/vite-5.4.21.tgz",
+      "integrity": "sha512-o5a9xKjbtuhY6Bi5S3+HvbRERmouabWbyUcpXXUA1u+GNUKoROi9byOJ8M0nHbHYHkYICiMlqxkg1KkYmm25Sw==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "esbuild": "^0.21.3",
+        "postcss": "^8.4.43",
+        "rollup": "^4.20.0"
+      },
+      "bin": {
+        "vite": "bin/vite.js"
+      },
+      "engines": {
+        "node": "^18.0.0 || >=20.0.0"
+      },
+      "funding": {
+        "url": "https://github.com/vitejs/vite?sponsor=1"
+      },
+      "optionalDependencies": {
+        "fsevents": "~2.3.3"
+      },
+      "peerDependencies": {
+        "@types/node": "^18.0.0 || >=20.0.0",
+        "less": "*",
+        "lightningcss": "^1.21.0",
+        "sass": "*",
+        "sass-embedded": "*",
+        "stylus": "*",
+        "sugarss": "*",
+        "terser": "^5.4.0"
+      },
+      "peerDependenciesMeta": {
+        "@types/node": {
+          "optional": true
+        },
+        "less": {
+          "optional": true
+        },
+        "lightningcss": {
+          "optional": true
+        },
+        "sass": {
+          "optional": true
+        },
+        "sass-embedded": {
+          "optional": true
+        },
+        "stylus": {
+          "optional": true
+        },
+        "sugarss": {
+          "optional": true
+        },
+        "terser": {
+          "optional": true
+        }
+      }
+    },
+    "node_modules/yallist": {
+      "version": "3.1.1",
+      "resolved": "https://registry.npmjs.org/yallist/-/yallist-3.1.1.tgz",
+      "integrity": "sha512-a4UGQaWPH59mOXUYnAG2ewncQS4i4F43Tv3JoAM+s2VDAmS9NsK8GpDMLrCHPksFT7h3K6TOoUNn2pb7RoXx4g==",
+      "dev": true,
+      "license": "ISC"
+    }
+  }
+}
+
+
+--- FILE: public/favicon.svg ---
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><circle cx="32" cy="32" r="32" fill="#111827"/><text x="32" y="41" text-anchor="middle" font-family="system-ui,Arial,sans-serif" font-size="26" font-weight="700" letter-spacing="-1" fill="#fff">VT</text><circle cx="50" cy="14" r="5" fill="#F26522"/></svg>
+
+
+--- FILE: public/cidev.png [BINARY OR UNREADABLE] ---
+
+--- FILE: src/vite-env.d.ts ---
+/// <reference types="vite/client" />
+
+
+--- FILE: src/main.tsx ---
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App'
+import './index.css'
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+)
+
+
+--- FILE: src/App.tsx ---
+import { useEffect, useState } from 'react'
+import { About } from './components/About'
+import { Article } from './components/Article'
+import { CaseStudies } from './components/CaseStudies'
+import { Contact } from './components/Contact'
+import { Footer } from './components/Footer'
+import { Hero } from './components/Hero'
+import { Journal } from './components/Journal'
+import { Process } from './components/Process'
+import { ScrollProgress } from './components/ScrollProgress'
+import { Services } from './components/Services'
+import { Testimonials } from './components/Testimonials'
+import { POSTS, PRIVACY, type Post } from './data/posts'
+
+const SITE_TITLE = 'Vetor Agência — Publicidade e Propaganda'
+
+function useHashPost() {
+  const [post, setPost] = useState<Post | null>(() => matchPost(window.location.hash))
+
+  useEffect(() => {
+    const onHashChange = () => setPost(matchPost(window.location.hash))
+    window.addEventListener('hashchange', onHashChange)
+    return () => window.removeEventListener('hashchange', onHashChange)
+  }, [])
+
+  return post
+}
+
+function matchPost(hash: string) {
+  if (hash === '#/privacidade') return PRIVACY
+  const match = hash.match(/^#\/blog\/([a-z0-9-]+)$/)
+  if (!match) return null
+  return POSTS.find((item) => item.slug === match[1]) ?? null
+}
+
+export default function App() {
+  const post = useHashPost()
+
+  useEffect(() => {
+    if (post) {
+      document.title = `${post.title} — Vetor Agência`
+      window.scrollTo(0, 0)
+      return () => {
+        document.title = SITE_TITLE
+      }
+    }
+
+    document.title = SITE_TITLE
+    const id = window.location.hash.replace('#', '')
+    if (!id || id.startsWith('/')) return
+    const el = document.getElementById(id)
+    if (el) el.scrollIntoView()
+  }, [post])
+
+  if (post) {
+    return (
+      <main className="min-h-screen bg-white antialiased">
+        <ScrollProgress />
+        <Article post={post} plain={post.slug === 'privacidade'} />
+      </main>
+    )
+  }
+
+  return (
+    <main className="min-h-screen bg-white antialiased">
+      <ScrollProgress />
+      <Hero />
+      <About />
+      <CaseStudies />
+      <Services />
+      <Process />
+      <Testimonials />
+      <Journal />
+      <Contact />
+      <Footer />
+    </main>
+  )
+}
+
+
+--- FILE: src/index.css ---
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
+
+@layer utilities {
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee 60s linear infinite;
+    will-change: transform;
+  }
+
+  .marquee:hover .marquee-track {
+    animation-play-state: paused;
+  }
+
+  .marquee-mask {
+    mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track {
+      animation-duration: 150s;
+    }
+  }
+
+  .liquid-glass {
+    position: relative;
+    background: rgba(255, 255, 255, 0.01);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.12),
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.2);
+  }
+
+  .liquid-glass::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.6),
+      rgba(255, 255, 255, 0.05) 40%,
+      rgba(255, 255, 255, 0.05) 60%,
+      rgba(255, 255, 255, 0.35)
+    );
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  .liquid-glass-strong {
+    background: rgba(255, 255, 255, 0.01);
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.12),
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.2);
+  }
+}
+
+@keyframes shader-fallback-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(4%, -6%, 0) scale(1.08);
+  }
+}
+
+@keyframes shader-fallback-drift-alt {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(-5%, -4%, 0) scale(1.12);
+  }
+}
+
+.shader-fallback {
+  background: radial-gradient(120% 95% at 50% 0%, #ffffff 0%, #f4f4f4 55%, #efefef 100%);
+  overflow: hidden;
+}
+
+.shader-fallback::before,
+.shader-fallback::after {
+  content: '';
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(90px);
+  will-change: transform;
+}
+
+.shader-fallback::before {
+  bottom: -38%;
+  left: -12%;
+  height: 62vw;
+  width: 62vw;
+  background: radial-gradient(circle, rgba(255, 95, 3, 0.55) 0%, rgba(255, 95, 3, 0) 65%);
+  animation: shader-fallback-drift 18s ease-in-out infinite;
+}
+
+.shader-fallback::after {
+  right: -10%;
+  bottom: -30%;
+  height: 52vw;
+  width: 52vw;
+  background: radial-gradient(circle, rgba(255, 150, 90, 0.4) 0%, rgba(255, 150, 90, 0) 65%);
+  animation: shader-fallback-drift-alt 22s ease-in-out infinite;
+}
+
+
+--- FILE: src/data/posts.ts ---
+export type Post = {
+  slug: string
+  category: string
+  date: string
+  readTime: string
+  title: string
+  excerpt: string
+  gradient: string
+  sections: { heading: string; paragraphs: string[] }[]
+}
+
+export const POSTS: Post[] = [
+  {
+    slug: 'ideia-criativa-que-resiste-ao-tempo',
+    category: 'Estratégia',
+    date: '08 set 2026',
+    readTime: '5 min',
+    title: 'Como construir uma ideia criativa que resiste ao tempo e aos algoritmos',
+    excerpt: 'O que separa uma ideia memorável de uma campanha esquecida em duas semanas.',
+    gradient: 'bg-gradient-to-br from-[#F26522] to-[#ffb07a]',
+    sections: [
+      {
+        heading: 'Comece pelo problema, não pelo formato',
+        paragraphs: [
+          'Uma ideia forte não nasce de um briefing de mídia. Ela nasce de um problema real: um hábito que a marca quer mudar, um preconceito que o público carrega, uma verdade que ninguém disse em voz alta. Quando a conversa começa pelo Reel, pelo outdoor ou pelo filme de trinta segundos, o conceito já chega estreito demais para durar.',
+          'Antes de escolher canal, descreva o que precisa acontecer na cabeça de quem vê. Se a frase de ouro só funciona num formato, ela não é ideia — é recurso. Ideias que resistem ao tempo cabem em um cartaz, numa conversa e num filme sem perder o sentido.',
+        ],
+      },
+      {
+        heading: 'Uma ideia, muitos formatos',
+        paragraphs: [
+          'O teste mais honesto de um conceito é perguntar se ele ainda funciona sem o efeito especial, sem a trilha e sem o influencer da vez. Se a resposta depende do recurso, a campanha envelhece no mesmo ritmo da plataforma. Se a resposta está no insight, cada canal vira adaptação, não reinvenção.',
+          'Trabalhe um núcleo curto, que qualquer pessoa da equipe consiga repetir. A partir dele, abra ramificações: peça de mídia, conteúdo de redes, atendimento, ponto de venda. O público deve reconhecer a mesma marca em todos os pontos, não uma coleção de execuções desconectadas.',
+        ],
+      },
+      {
+        heading: 'Teste antes de investir em mídia',
+        paragraphs: [
+          'Colocar uma campanha no ar sem ouvir ninguém é um atalho caro. Mostre o conceito para pessoas que não trabalham com você. Peça para contar o que entenderam, não o que acharam “legal”. Se a leitura muda a cada conversa, o problema está no núcleo, não no layout.',
+          'Ajuste o que for ambíguo enquanto o investimento ainda é tempo, não verba. Um teste simples — uma frase, uma imagem, uma reação — evita reescrever a campanha depois que ela já está no ar.',
+        ],
+      },
+      {
+        heading: 'Meça o que importa',
+        paragraphs: [
+          'Alcance e cliques descrevem movimento, não memória. Combine indicadores de desempenho com sinais de reconhecimento: as pessoas repetem a ideia? Associam à marca sem ver o logo? Continuam falando depois que a mídia acabou?',
+          'Uma ideia que resiste ao tempo gera conversa, não só tráfego. Use os números para calibrar, mas deixe o critério de sucesso no que a marca quer ser lembrada por fazer — não no que o algoritmo privilegiou naquela semana.',
+        ],
+      },
+    ],
+  },
+  {
+    slug: 'midia-paga-ou-organica',
+    category: 'Mídia',
+    date: '22 ago 2026',
+    readTime: '4 min',
+    title: 'Mídia paga ou orgânica? Como dividir o orçamento com inteligência',
+    excerpt: 'Um guia prático para equilibrar alcance, custo e construção de marca.',
+    gradient: 'bg-gradient-to-br from-gray-900 to-gray-600',
+    sections: [
+      {
+        heading: 'O papel de cada canal',
+        paragraphs: [
+          'Mídia paga compra atenção agora. Orgânica constrói relacionamento ao longo do tempo. Confundir os dois papéis é o caminho mais curto para gastar demais no que deveria ser conversa e esperar demais do que deveria ser distribuição.',
+          'Paga serve para chegar em quem ainda não te conhece, para acelerar um lançamento e para testar mensagens com controle. Orgânica serve para aprofundar, responder, mostrar o dia a dia da marca e manter o vínculo depois que o anúncio some. Uma não substitui a outra.',
+        ],
+      },
+      {
+        heading: 'Um ponto de partida para dividir o orçamento',
+        paragraphs: [
+          'Comece pelo objetivo do período, não pela moda do canal. Se a prioridade é fazer a marca ser vista por um público novo, a maior parte da verba precisa ir para distribuição paga, com criativos que aguentem volume. Se a prioridade é reputação e recorrência, fortaleça o conteúdo próprio e use a paga para ampliar o que já funciona.',
+          'Uma divisão inicial razoável é tratar a orgânica como operação contínua — equipe, calendário, comunidade — e a paga como investimento variável, ligado a campanhas e janelas de oportunidade. Ajuste conforme o resultado, não conforme o palpite da semana.',
+        ],
+      },
+      {
+        heading: 'Quando reforçar a mídia paga',
+        paragraphs: [
+          'Reforce a paga quando o conteúdo já provou que conversa com o público, mas não chega longe o suficiente. Também faz sentido acelerar quando há data, estoque, lançamento ou uma janela competitiva que não espera o crescimento natural do perfil.',
+          'O erro comum é colocar dinheiro em cima de uma mensagem ainda confusa. Paga multiplica o que existe. Se o conceito está fraco, ela só torna o problema mais caro e mais visível.',
+        ],
+      },
+      {
+        heading: 'Como medir e rebalancear',
+        paragraphs: [
+          'Olhe o conjunto, não o canal isolado. Combine custo de alcance, qualidade do tráfego, retenção e sinais de marca. Um anúncio barato que não gera lembrança é desperdício. Um conteúdo orgânico que gera conversa, mas não escala, pede distribuição — não abandono.',
+          'Rebalanceie com frequência curta o suficiente para corrigir rumo e longa o suficiente para o conteúdo respirar. Mídia inteligente não é escolher um lado. É saber quando pagar para ser visto e quando merecer ser acompanhado.',
+        ],
+      },
+    ],
+  },
+  {
+    slug: 'storytelling-de-marca',
+    category: 'Criação',
+    date: '15 jul 2026',
+    readTime: '5 min',
+    title: 'Storytelling de marca: sinais de que sua comunicação precisa de um novo conceito',
+    excerpt: 'Como perceber que a comunicação envelheceu e o que fazer a respeito.',
+    gradient: 'bg-gradient-to-br from-[#EFEFEF] to-gray-400',
+    sections: [
+      {
+        heading: 'Sinais de que o conceito envelheceu',
+        paragraphs: [
+          'O primeiro sinal é o silêncio. A campanha sai, as peças circulam e ninguém comenta, questiona ou repete. Outro é a equipe interna: se ninguém consegue explicar o conceito em uma frase, o público também não vai conseguir.',
+          'Há ainda o cansaço visual. Quando as peças só mudam de cor, de recorte ou de trilha, mas dizem a mesma coisa de sempre, a marca está operando no automático. Comunicação que envelheceu não precisa de mais volume. Precisa de um novo ponto de vista.',
+        ],
+      },
+      {
+        heading: 'O que é, de fato, um conceito de comunicação',
+        paragraphs: [
+          'Conceito não é slogan, não é paleta e não é o nome da campanha. É a lente pela qual a marca olha o mundo e convida o público a olhar junto. Ele organiza escolhas: o que dizer, o que calar, o tom, o humor, o conflito.',
+          'Um bom conceito gera variação sem se perder. Cada peça parece nova, mas pertence à mesma família. Se cada campanha começa do zero, a marca não constrói memória — só ocupa espaço.',
+        ],
+      },
+      {
+        heading: 'Renovar sem perder a identidade',
+        paragraphs: [
+          'Renovar não é apagar a história. É decidir o que permanece — valores, território, jeito de falar — e o que precisa sair do caminho. Marcas que mudam tudo de uma vez confundem. Marcas que não mudam nada desaparecem.',
+          'Traga para a mesa o que ainda é verdade sobre o produto e o que o público já não acredita. O novo conceito deve tensionar esse espaço: familiar o bastante para ser reconhecido, fresco o bastante para merecer atenção.',
+        ],
+      },
+      {
+        heading: 'Primeiros passos',
+        paragraphs: [
+          'Reúna as últimas campanhas e leia em voz alta, sem as imagens. Se o texto parece genérico, o problema não é a produção. Converse com clientes e com quem atende o cliente todo dia. Pergunte o que a marca promete e o que ela realmente entrega.',
+          'Com isso em mãos, escreva o conceito em poucas linhas e teste se ele aguenta três execuções diferentes. Se aguentar, você tem um ponto de partida. Se não aguentar, continue até ter. Storytelling de marca não é enfeite: é o filtro que impede a comunicação de envelhecer no piloto automático.',
+        ],
+      },
+    ],
+  },
+]
+
+export const PRIVACY: Post = {
+  slug: 'privacidade',
+  category: 'Legal',
+  date: 'Atualizada em out 2026',
+  readTime: '2 min',
+  title: 'Política de Privacidade',
+  excerpt: 'Como a Vetor Agência trata os dados pessoais coletados neste site.',
+  gradient: 'bg-gray-100',
+  sections: [
+    {
+      heading: 'Dados que coletamos',
+      paragraphs: [
+        'Coletamos nome, e-mail, empresa, interesse, faixa de investimento e a mensagem enviados no formulário deste site.',
+      ],
+    },
+    {
+      heading: 'Para que usamos',
+      paragraphs: [
+        'Usamos esses dados para responder o contato e enviar propostas. A base legal é o consentimento, nos termos da Lei 13.709/2018 (LGPD).',
+      ],
+    },
+    {
+      heading: 'Seus direitos',
+      paragraphs: [
+        'Você pode solicitar acesso, correção, exclusão dos dados e a revogação do consentimento. Envie pedidos para privacidade@vetoragencia.com.',
+      ],
+    },
+    {
+      heading: 'Retenção e compartilhamento',
+      paragraphs: [
+        'Guardamos os dados pelo tempo necessário ao atendimento. Não vendemos dados pessoais.',
+        'Texto ilustrativo para projeto conceitual.',
+      ],
+    },
+  ],
+}
+
+
+--- FILE: src/hooks/useLocalTime.ts ---
+import { useEffect, useState } from 'react'
+
+const formatter = new Intl.DateTimeFormat('pt-BR', {
+  timeZone: 'America/Sao_Paulo',
+  hour: '2-digit',
+  minute: '2-digit',
+  hour12: false,
+})
+
+export function useLocalTime() {
+  const [time, setTime] = useState(() => formatter.format(new Date()))
+
+  useEffect(() => {
+    const tick = () => setTime(formatter.format(new Date()))
+    tick()
+    const interval = window.setInterval(tick, 1000)
+    return () => window.clearInterval(interval)
+  }, [])
+
+  return time
+}
+
+
+--- FILE: src/components/Process.tsx ---
+import { Reveal } from './Reveal'
+import { SectionBadge } from './SectionBadge'
+
+type Step = {
+  number: string
+  title: string
+  description: string
+}
+
+const STEPS: Step[] = [
+  {
+    number: '01',
+    title: 'Briefing',
+    description: 'Imersão na marca, no público e nos concorrentes para definir metas e KPIs.',
+  },
+  {
+    number: '02',
+    title: 'Ideação',
+    description: 'Brainstorm, conceito criativo e roteiro de campanha aprovados com você.',
+  },
+  {
+    number: '03',
+    title: 'Produção',
+    description: 'Criação das peças, filmagens e adaptações para cada canal e formato.',
+  },
+  {
+    number: '04',
+    title: 'Veiculação e otimização',
+    description: 'Mídia no ar, monitoramento em tempo real e otimização contínua.',
+  },
+]
+
+export function Process() {
+  return (
+    <section
+      id="processo"
+      className="bg-gray-900 pb-16 pt-16 text-white sm:pb-20 sm:pt-20 lg:pb-28 lg:pt-28"
+    >
+      <div className="mx-auto w-full max-w-[1440px] px-5 sm:px-8 lg:px-12">
+        <SectionBadge dark number="4" label="Como trabalhamos" />
+
+        <Reveal variant="blur">
+          <h2 className="mb-12 text-[clamp(1.75rem,7vw,4.2rem)] font-medium leading-[1.08] tracking-[-0.03em] text-white sm:mb-16 sm:text-[clamp(2.5rem,5vw,4.2rem)] lg:mb-20">
+            Um processo claro,
+            <br className="hidden sm:block" />
+            <span className="sm:hidden"> </span>
+            do briefing à campanha no ar.
+          </h2>
+        </Reveal>
+
+        <div className="grid grid-cols-1 gap-x-8 gap-y-10 md:grid-cols-2 lg:grid-cols-4">
+          {STEPS.map((step, index) => (
+            <Reveal key={step.number} delay={index * 80}>
+              <div className="border-t border-white/15 pt-6">
+                <span className="text-[13px] text-white/50">{step.number}</span>
+                <h3 className="mt-10 text-[20px] font-medium sm:mt-14">{step.title}</h3>
+                <p className="mt-3 text-[14px] leading-relaxed text-white/60">
+                  {step.description}
+                </p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+
+--- FILE: src/components/Services.tsx ---
+import { BarChart3, Clapperboard, Lightbulb, Megaphone, type LucideIcon } from 'lucide-react'
+import { Reveal } from './Reveal'
+import { SectionBadge } from './SectionBadge'
+
+type Service = {
+  icon: LucideIcon
+  title: string
+  description: string
+}
+
+const SERVICES: Service[] = [
+  {
+    icon: Lightbulb,
+    title: 'Ideação e estratégia',
+    description:
+      'Insights, conceito criativo e plano de comunicação para posicionar sua marca.',
+  },
+  {
+    icon: Clapperboard,
+    title: 'Criação e produção',
+    description: 'Campanhas, filmes, fotografia e peças para todos os canais, do digital ao offline.',
+  },
+  {
+    icon: Megaphone,
+    title: 'Mídia e performance',
+    description: 'Planejamento de mídia paga e orgânica com foco em alcance, leads e vendas.',
+  },
+  {
+    icon: BarChart3,
+    title: 'Social e dados',
+    description: 'Gestão de redes, influenciadores e relatórios que transformam dados em decisões.',
+  },
+]
+
+export function Services() {
+  return (
+    <section
+      id="servicos"
+      className="bg-white pb-16 pt-16 sm:pb-20 sm:pt-20 lg:pb-28 lg:pt-28"
+    >
+      <div className="mx-auto w-full max-w-[1440px] px-5 sm:px-8 lg:px-12">
+        <SectionBadge number="3" label="O que fazemos" />
+
+        <Reveal variant="blur">
+          <h2 className="mb-10 text-[clamp(1.5rem,4vw,3.2rem)] font-medium leading-[1.12] tracking-[-0.02em] text-gray-900 sm:mb-14 lg:mb-16">
+            Da ideia à veiculação,
+            <br className="hidden sm:block" />
+            <span className="sm:hidden"> </span>
+            tudo sob o mesmo teto.
+          </h2>
+        </Reveal>
+
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
+          {SERVICES.map((service, index) => {
+            const Icon = service.icon
+
+            return (
+              <Reveal key={service.title} delay={index * 80}>
+                <div className="group flex min-h-[280px] flex-col justify-between rounded-2xl bg-[#F5F5F5] p-6 transition-colors duration-500 hover:bg-gray-900 sm:p-7">
+                  <div className="flex items-center justify-between">
+                    <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white">
+                      <Icon size={18} strokeWidth={1.75} className="text-gray-900" />
+                    </span>
+                    <span className="text-[13px] text-gray-600 transition-colors duration-500 group-hover:text-white/60">
+                      {String(index + 1).padStart(2, '0')}
+                    </span>
+                  </div>
+
+                  <div>
+                    <h3 className="text-[18px] font-medium text-gray-900 transition-colors duration-500 group-hover:text-white">
+                      {service.title}
+                    </h3>
+                    <p className="mt-2 text-[14px] leading-relaxed text-gray-600 transition-colors duration-500 group-hover:text-white/70">
+                      {service.description}
+                    </p>
+                  </div>
+                </div>
+              </Reveal>
+            )
+          })}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+
+--- FILE: src/components/Article.tsx ---
+import { ArrowRight } from 'lucide-react'
+import { POSTS, type Post } from '../data/posts'
+import { Footer } from './Footer'
+import { Reveal } from './Reveal'
+import { TextRoll } from './TextRoll'
+
+type ArticleProps = {
+  post: Post
+  plain?: boolean
+}
+
+export function Article({ post, plain = false }: ArticleProps) {
+  const related = POSTS.filter((item) => item.slug !== post.slug)
+
+  return (
+    <div className="bg-white">
+      <div className="mx-auto w-full max-w-[1440px] p-2 sm:p-3">
+        <div className="flex items-center justify-between rounded-full bg-gray-900 p-[5px]">
+          <a
+            href="/"
+            aria-label="Página inicial da Vetor Agência"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-[10px] font-bold tracking-tight text-gray-900 sm:h-10 sm:w-10 sm:text-[11px]"
+          >
+            VT
+          </a>
+          <a
+            href="/#journal"
+            className="pr-4 text-[13px] text-white transition-colors duration-300 hover:text-white/60"
+          >
+            ← Voltar ao site
+          </a>
+        </div>
+      </div>
+
+      <header className="mx-auto max-w-[860px] px-5 pt-12 sm:px-8 sm:pt-16 lg:px-12">
+        <div className="flex flex-wrap items-center gap-3">
+          <span className="rounded-full border border-gray-200 px-3 py-1 text-[12px] font-medium text-gray-900 sm:text-[13px]">
+            {post.category}
+          </span>
+          <span className="text-[13px] text-gray-600">
+            {post.date} · {post.readTime} de leitura
+          </span>
+        </div>
+        <h1 className="mt-5 text-[clamp(1.5rem,4vw,3.2rem)] font-medium leading-[1.12] tracking-[-0.02em] text-gray-900">
+          {post.title}
+        </h1>
+        <p className="mt-4 text-[16px] text-gray-600 sm:text-[18px]">{post.excerpt}</p>
+      </header>
+
+      {!plain && (
+        <div className="mx-auto mt-10 max-w-[1100px] px-5 sm:px-8 lg:px-12">
+          <div className={`aspect-[16/8] rounded-2xl ${post.gradient}`} />
+        </div>
+      )}
+
+      <article className="mx-auto max-w-[720px] px-5 py-12 sm:px-8 sm:py-16 lg:px-12">
+        {post.sections.map((section, index) => (
+          <Reveal key={section.heading} delay={index * 80}>
+            <section>
+              <h2
+                className={`text-[22px] font-medium tracking-[-0.01em] text-gray-900 sm:text-[26px] ${
+                  index === 0 ? '' : 'mt-10'
+                }`}
+              >
+                {section.heading}
+              </h2>
+              {section.paragraphs.map((paragraph) => (
+                <p key={paragraph} className="mt-4 text-[16px] leading-[1.7] text-gray-700 sm:text-[17px]">
+                  {paragraph}
+                </p>
+              ))}
+            </section>
+          </Reveal>
+        ))}
+      </article>
+
+      {!plain && (
+        <div className="mx-auto max-w-[720px] px-5 sm:px-8 lg:px-12">
+          <div className="rounded-2xl bg-[#F5F5F5] p-6 sm:p-8">
+            <p className="text-[20px] font-medium text-gray-900">Quer aplicar isso na sua marca?</p>
+            <a
+              href="/#connect"
+              className="group mt-5 inline-flex items-center gap-3 rounded-full bg-[#F26522] py-2 pl-5 pr-2 text-[13px] font-medium text-white transition-colors duration-300 hover:bg-[#e05a1a] sm:pl-6 sm:text-[14px]"
+            >
+              <TextRoll>Fale com a Vetor</TextRoll>
+              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white sm:h-8 sm:w-8">
+                <ArrowRight
+                  size={14}
+                  strokeWidth={1.75}
+                  className="text-[#F26522] transition-transform duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:-rotate-45"
+                />
+              </span>
+            </a>
+          </div>
+
+          <div className="mt-12 pb-16 sm:pb-20">
+            <h3 className="text-[14px] font-semibold text-gray-900">Continue lendo</h3>
+            <div className="mt-4 flex flex-col gap-3">
+              {related.map((item) => (
+                <a
+                  key={item.slug}
+                  href={`#/blog/${item.slug}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[17px] font-medium text-gray-900 transition-colors duration-300 hover:text-gray-500"
+                >
+                  {item.title}
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      <Footer />
+    </div>
+  )
+}
+
+
+--- FILE: src/components/Reveal.tsx ---
+import { useEffect, useRef, useState, type ReactNode } from 'react'
+
+type RevealVariant = 'up' | 'fade' | 'scale' | 'left' | 'right' | 'blur'
+
+type RevealProps = {
+  children: ReactNode
+  className?: string
+  delay?: number
+  variant?: RevealVariant
+}
+
+const INITIAL: Record<RevealVariant, string> = {
+  up: 'opacity-0 translate-y-6',
+  fade: 'opacity-0',
+  scale: 'opacity-0 scale-95',
+  left: 'opacity-0 -translate-x-8',
+  right: 'opacity-0 translate-x-8',
+  blur: 'opacity-0 blur-sm translate-y-4',
+}
+
+const VISIBLE: Record<RevealVariant, string> = {
+  up: 'opacity-100 translate-y-0',
+  fade: 'opacity-100',
+  scale: 'opacity-100 scale-100',
+  left: 'opacity-100 translate-x-0',
+  right: 'opacity-100 translate-x-0',
+  blur: 'opacity-100 blur-0 translate-y-0',
+}
+
+export function Reveal({ children, className = '', delay = 0, variant = 'up' }: RevealProps) {
+  const ref = useRef<HTMLDivElement>(null)
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    const element = ref.current
+    if (!element) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setVisible(true)
+            observer.disconnect()
+          }
+        })
+      },
+      { threshold: 0.15 },
+    )
+
+    observer.observe(element)
+
+    return () => observer.disconnect()
+  }, [])
+
+  return (
+    <div
+      ref={ref}
+      style={delay ? { transitionDelay: `${delay}ms` } : undefined}
+      className={`transition-all duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)] motion-reduce:!opacity-100 motion-reduce:!translate-y-0 motion-reduce:!translate-x-0 motion-reduce:!scale-100 motion-reduce:!blur-0 motion-reduce:transition-none ${
+        visible ? VISIBLE[variant] : INITIAL[variant]
+      } ${className}`}
+    >
+      {children}
+    </div>
+  )
+}
+
+
+--- FILE: src/components/Hero.tsx ---
+import { ArrowRight, Sparkles } from 'lucide-react'
+import { Navbar } from './Navbar'
+import { Reveal } from './Reveal'
+import { ShaderBackdrop } from './ShaderBackdrop'
+import { TextRoll } from './TextRoll'
+
+export function Hero() {
+  return (
+    <section id="top" className="relative flex min-h-screen flex-col overflow-hidden bg-[#EFEFEF]">
+      <ShaderBackdrop />
+      <Navbar />
+
+      <div className="flex-1" aria-hidden="true" />
+
+      <div className="relative z-20 mx-auto w-full max-w-[1440px] px-5 pb-14 sm:px-8 sm:pb-16 lg:px-12 lg:pb-20">
+        <Reveal delay={100}>
+          <p className="mb-5 text-[13px] tracking-wide text-gray-900 sm:mb-8 sm:text-[14px]">
+            Vetor Agência
+          </p>
+        </Reveal>
+
+        <Reveal variant="blur" delay={250}>
+          <h1 className="text-[clamp(1.75rem,7vw,4.2rem)] font-medium leading-[1.08] tracking-[-0.03em] text-gray-900 sm:text-[clamp(2.5rem,5vw,4.2rem)]">
+            Campanhas que fazem sua marca
+            <br className="hidden sm:block" />
+            <span className="sm:hidden"> </span>
+            ser lembrada, escolhida
+            <br className="hidden sm:block" />
+            <span className="sm:hidden"> </span>
+            e comprada.
+          </h1>
+        </Reveal>
+
+        <Reveal delay={450}>
+          <div className="mt-8 flex flex-col items-start gap-4 sm:mt-12 sm:flex-row sm:items-center sm:gap-5">
+            <a
+              href="#connect"
+              className="group flex items-center gap-3 rounded-full bg-[#F26522] py-2 pl-5 pr-2 text-[13px] font-medium text-white transition-colors duration-300 hover:bg-[#e05a1a] sm:pl-6 sm:text-[14px]"
+            >
+              <TextRoll>Iniciar um projeto</TextRoll>
+              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white sm:h-8 sm:w-8">
+                <ArrowRight
+                  size={14}
+                  strokeWidth={1.75}
+                  className="text-[#F26522] transition-transform duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:-rotate-45"
+                />
+              </span>
+            </a>
+
+            <div className="inline-flex items-center gap-2 rounded-[4px] bg-white px-3 py-2 shadow-[0_2px_8px_rgba(0,0,0,0.08)] transition-shadow duration-300 hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)] sm:gap-2.5 sm:px-4 sm:py-2.5">
+              <Sparkles className="h-5 w-5 shrink-0 text-[#F26522] sm:h-6 sm:w-6" strokeWidth={1.75} />
+              <span className="text-[13px] font-medium text-gray-900 sm:text-[14px]">
+                120+ campanhas no ar
+              </span>
+              <span className="rounded bg-gray-900 px-1.5 py-0.5 text-[10px] text-white sm:px-2 sm:text-[11px]">
+                Desde 2018
+              </span>
+            </div>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  )
+}
+
+
+--- FILE: src/components/LazyVideo.tsx ---
+import { useEffect, useRef } from 'react'
+
+type LazyVideoProps = {
+  src: string
+  className?: string
+}
+
+export function LazyVideo({ src, className = '' }: LazyVideoProps) {
+  const ref = useRef<HTMLVideoElement>(null)
+
+  useEffect(() => {
+    const video = ref.current
+    if (!video) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          video.play().catch(() => undefined)
+        } else {
+          video.pause()
+        }
+      },
+      { threshold: 0.25 },
+    )
+
+    observer.observe(video)
+    return () => observer.disconnect()
+  }, [])
+
+  return (
+    <video
+      ref={ref}
+      src={src}
+      className={className}
+      muted
+      loop
+      playsInline
+      preload="metadata"
+      aria-hidden="true"
+    />
+  )
+}
+
+
+--- FILE: src/components/SectionBadge.tsx ---
+type SectionBadgeProps = {
+  number: string
+  label: string
+  borderClassName?: string
+  dark?: boolean
+}
+
+export function SectionBadge({
+  number,
+  label,
+  borderClassName = 'border-gray-200',
+  dark = false,
+}: SectionBadgeProps) {
+  return (
+    <div className="mb-6 flex items-center gap-3 sm:mb-8">
+      <span
+        className={`flex h-6 w-6 items-center justify-center rounded-full text-[11px] font-semibold sm:h-7 sm:w-7 sm:text-[12px] ${
+          dark ? 'bg-white text-gray-900' : 'bg-gray-900 text-white'
+        }`}
+      >
+        {number}
+      </span>
+      <span
+        className={`rounded-full border px-3 py-1 text-[12px] font-medium sm:px-4 sm:py-1.5 sm:text-[13px] ${
+          dark ? 'border-white/25 text-white' : `text-gray-900 ${borderClassName}`
+        }`}
+      >
+        {label}
+      </span>
+    </div>
+  )
+}
+
+
+--- FILE: src/components/PartnerIcon.tsx ---
+type PartnerIconProps = {
+  className?: string
+}
+
+export function PartnerIcon({ className = '' }: PartnerIconProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 100 100"
+      aria-hidden="true"
+      className={className}
+    >
+      <path
+        fill="currentColor"
+        d="m19.6 66.5 19.7-11 .3-1-.3-.5h-1l-3.3-.2-11.2-.3L14 53l-9.5-.5-2.4-.5L0 49l.2-1.5 2-1.3 2.9.2 6.3.5 9.5.6 6.9.4L38 49.1h1.6l.2-.7-.5-.4-.4-.4L29 41l-10.6-7-5.6-4.1-3-2-1.5-2-.6-4.2 2.7-3 3.7.3.9.2 3.7 2.9 8 6.1L37 36l1.5 1.2.6-.4.1-.3-.7-1.1L33 25l-6-10.4-2.7-4.3-.7-2.6c-.3-1-.4-2-.4-3l3-4.2L28 0l4.2.6L33.8 2l2.6 6 4.1 9.3L47 29.9l2 3.8 1 3.4.3 1h.7v-.5l.5-7.2 1-8.7 1-11.2.3-3.2 1.6-3.8 3-2L61 2.6l2 2.9-.3 1.8-1.1 7.7L59 27.1l-1.5 8.2h.9l1-1.1 4.1-5.4 6.9-8.6 3-3.5L77 13l2.3-1.8h4.3l3.1 4.7-1.4 4.9-4.4 5.6-3.7 4.7-5.3 7.1-3.2 5.7.3.4h.7l12-2.6 6.4-1.1 7.6-1.3 3.5 1.6.4 1.6-1.4 3.4-8.2 2-9.6 2-14.3 3.3-.2.1.2.3 6.4.6 2.8.2h6.8l12.6 1 3.3 2 1.9 2.7-.3 2-5.1 2.6-6.8-1.6-16-3.8-5.4-1.3h-.8v.4l4.6 4.5 8.3 7.5L89 80.1l.5 2.4-1.3 2-1.4-.2-9.2-7-3.6-3-8-6.8h-.5v.7l1.8 2.7 9.8 14.7.5 4.5-.7 1.4-2.6 1-2.7-.6-5.8-8-6-9-4.7-8.2-.5.4-2.9 30.2-1.3 1.5-3 1.2-2.5-2-1.4-3 1.4-6.2 1.6-8 1.3-6.4 1.2-7.9.7-2.6v-.2H49L43 72l-9 12.3-7.2 7.6-1.7.7-3-1.5.3-2.8L24 86l10-12.8 6-7.9 4-4.6-.1-.5h-.3L17.2 77.4l-4.7.6-2-2 .2-3 1-1 8-5.5Z"
+      />
+    </svg>
+  )
+}
+
+
+--- FILE: src/components/Footer.tsx ---
+const CIDEV_URL = 'https://www.instagram.com/tech.cidev/'
+
+const NAV_LINKS = [
+  { label: 'Campanhas', href: '/#work' },
+  { label: 'Agência', href: '/#studio' },
+  { label: 'Serviços', href: '/#servicos' },
+  { label: 'Blog', href: '/#journal' },
+  { label: 'Contato', href: '/#connect' },
+]
+
+const SOCIAL = [
+  { label: 'Instagram', href: 'https://www.instagram.com/' },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/' },
+  { label: 'Behance', href: 'https://www.behance.net/' },
+]
+
+export function Footer() {
+  return (
+    <footer className="bg-gray-900 text-white">
+      <div className="mx-auto w-full max-w-[1440px] px-5 py-10 sm:px-8 sm:py-12 lg:px-12">
+        <div className="flex flex-col justify-between gap-8 md:flex-row">
+          <div className="flex items-start gap-4">
+            <a
+              href="/#top"
+              aria-label="Página inicial da Vetor Agência"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-[10px] font-bold tracking-tight text-gray-900 sm:h-10 sm:w-10 sm:text-[11px]"
+            >
+              VT
+            </a>
+            <p className="max-w-[260px] text-[14px] text-white/60">
+              Agência de publicidade e propaganda guiada por estratégia.
+            </p>
+          </div>
+
+          <div className="flex flex-wrap gap-6 text-[14px]">
+            {NAV_LINKS.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                className="transition-colors duration-300 hover:text-white/50"
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
+
+          <div className="flex flex-wrap gap-6 text-[14px]">
+            {SOCIAL.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="transition-colors duration-300 hover:text-white/50"
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-10 flex flex-col justify-between gap-3 border-t border-white/15 pt-6 text-[12px] text-white/50 sm:flex-row sm:text-[13px]">
+          <p>© 2026 Vetor Agência. Todos os direitos reservados.</p>
+          <p>Projeto conceitual — depoimentos e dados ilustrativos</p>
+          <a href="#/privacidade" className="transition-colors duration-300 hover:text-white/50">
+            Política de privacidade
+          </a>
+          <a href="/#top" className="transition-colors duration-300 hover:text-white/50">
+            Voltar ao topo ↑
+          </a>
+          {CIDEV_URL ? (
+            <a href={CIDEV_URL} target="_blank" rel="noopener noreferrer">
+              <span className="inline-flex items-center gap-2">
+                Desenvolvido por{' '}
+                <img
+                  src="/cidev.png"
+                  alt="Cidev"
+                  className="h-4 w-auto opacity-80 transition-opacity duration-300 hover:opacity-100"
+                />
+              </span>
+            </a>
+          ) : (
+            <span className="inline-flex items-center gap-2">
+              Desenvolvido por{' '}
+              <img
+                src="/cidev.png"
+                alt="Cidev"
+                className="h-4 w-auto opacity-80 transition-opacity duration-300 hover:opacity-100"
+              />
+            </span>
+          )}
+        </div>
+        <p className="mt-3 text-[12px] text-white/50">
+          Vetor Agência Ltda. · CNPJ 00.000.000/0001-00 · São Paulo, SP
+        </p>
+      </div>
+    </footer>
+  )
+}
+
+
+--- FILE: src/components/Parallax.tsx ---
+import { useEffect, useRef, type ReactNode } from 'react'
+
+type ParallaxProps = {
+  children: ReactNode
+  speed?: number
+  className?: string
+}
+
+export function Parallax({ children, speed = 0.08, className = '' }: ParallaxProps) {
+  const wrapRef = useRef<HTMLDivElement>(null)
+  const innerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const wrap = wrapRef.current
+    const inner = innerRef.current
+    if (!wrap || !inner) return
+
+    const media = window.matchMedia('(prefers-reduced-motion: reduce)')
+    if (media.matches) return
+
+    let frame = 0
+
+    const update = () => {
+      const rect = wrap.getBoundingClientRect()
+      const elementCenter = rect.top + rect.height / 2
+      const viewportCenter = window.innerHeight / 2
+      const offset = (elementCenter - viewportCenter) * speed
+      inner.style.transform = `translateY(${offset}px)`
+    }
+
+    const onScroll = () => {
+      if (frame) return
+      frame = window.requestAnimationFrame(() => {
+        frame = 0
+        update()
+      })
+    }
+
+    update()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll, { passive: true })
+
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+      if (frame) window.cancelAnimationFrame(frame)
+    }
+  }, [speed])
+
+  return (
+    <div ref={wrapRef} className={className}>
+      <div ref={innerRef} className="scale-110 will-change-transform">
+        {children}
+      </div>
+    </div>
+  )
+}
+
+
+--- FILE: src/components/Contact.tsx ---
+import { FormEvent, useState } from 'react'
+import { ArrowRight, MessageCircle } from 'lucide-react'
+import { Reveal } from './Reveal'
+import { SectionBadge } from './SectionBadge'
+import { ShaderBackdrop } from './ShaderBackdrop'
+import { TextRoll } from './TextRoll'
+
+const WHATSAPP = '5511900000000' // trocar pelo número real
+const FORM_ENDPOINT = import.meta.env.VITE_FORM_ENDPOINT as string | undefined
+
+const SERVICES = [
+  'Ideação e estratégia',
+  'Criação e produção',
+  'Mídia e performance',
+  'Social e dados',
+  'Ainda não sei',
+]
+
+const BUDGETS = [
+  'Até R$ 5 mil',
+  'R$ 5 a 15 mil',
+  'R$ 15 a 50 mil',
+  'Acima de R$ 50 mil',
+  'Prefiro conversar',
+]
+
+const FIELD =
+  'w-full rounded-full border border-gray-200 px-5 py-3 text-[14px] outline-none transition-colors duration-300 focus:border-gray-900'
+const SELECT = `${FIELD} appearance-none bg-white`
+
+export function Contact() {
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [company, setCompany] = useState('')
+  const [service, setService] = useState('')
+  const [budget, setBudget] = useState('')
+  const [message, setMessage] = useState('')
+  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
+
+  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    setStatus('sending')
+
+    const payload = { name, email, company, service, budget, message }
+
+    if (FORM_ENDPOINT) {
+      try {
+        const response = await fetch(FORM_ENDPOINT, {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        })
+        setStatus(response.ok ? 'sent' : 'error')
+      } catch {
+        setStatus('error')
+      }
+      return
+    }
+
+    const subject = encodeURIComponent(`Novo contato — ${name}`)
+    const body = encodeURIComponent(
+      `Nome: ${name}\nE-mail: ${email}\nEmpresa: ${company}\nServiço de interesse: ${service}\nInvestimento mensal estimado: ${budget}\nMensagem: ${message}`,
+    )
+    window.location.href = `mailto:ola@vetoragencia.com?subject=${subject}&body=${body}`
+    setStatus('sent')
+  }
+
+  return (
+    <section id="connect" className="relative overflow-hidden bg-[#EFEFEF] pb-16 pt-16 sm:pb-20 sm:pt-20 lg:pb-28 lg:pt-28">
+      <ShaderBackdrop />
+
+      <div className="relative z-20 mx-auto w-full max-w-[1440px] px-5 sm:px-8 lg:px-12">
+        <div className="grid items-end gap-10 lg:grid-cols-2 lg:gap-16">
+          <Reveal variant="blur">
+            <SectionBadge number="7" label="Vamos conversar" borderClassName="border-gray-300" />
+
+            <h2 className="text-[clamp(1.75rem,7vw,4.2rem)] font-medium leading-[1.08] tracking-[-0.03em] text-gray-900 sm:text-[clamp(2.5rem,5vw,4.2rem)]">
+              Vamos criar algo
+              <br className="hidden sm:block" />
+              <span className="sm:hidden"> </span>
+              que ninguém
+              <br className="hidden sm:block" />
+              <span className="sm:hidden"> </span>
+              vai esquecer?
+            </h2>
+
+            <p className="mt-6 text-[15px] font-medium text-gray-900 sm:text-[17px]">
+              Conte sobre a sua marca e o seu desafio. Respondemos em até 24 horas úteis.
+            </p>
+
+            <a
+              href={`https://wa.me/${WHATSAPP}?text=${encodeURIComponent('Olá! Vim pelo site e quero falar sobre um projeto.')}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group mt-8 inline-flex items-center gap-3 rounded-full bg-gray-900 py-2 pl-5 pr-2 text-[13px] font-medium text-white sm:text-[14px]"
+            >
+              <TextRoll>Falar no WhatsApp</TextRoll>
+              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white sm:h-8 sm:w-8">
+                <MessageCircle
+                  size={14}
+                  className="text-gray-900 transition-transform duration-500 group-hover:-rotate-12"
+                />
+              </span>
+            </a>
+
+            <div className="mt-8 flex flex-col gap-1 text-[14px] text-gray-900">
+              <a
+                href="mailto:ola@vetoragencia.com"
+                className="transition-colors duration-300 hover:text-gray-500"
+              >
+                ola@vetoragencia.com
+              </a>
+              <a href="tel:+551140000000" className="transition-colors duration-300 hover:text-gray-500">
+                +55 11 4000-0000
+              </a>
+              <span className="transition-colors duration-300 hover:text-gray-500">São Paulo, SP — Brasil</span>
+            </div>
+          </Reveal>
+
+          <Reveal delay={80}>
+            <div className="rounded-2xl bg-white p-6 sm:p-8">
+              {status === 'sent' ? (
+                <p className="text-[18px] font-medium text-gray-900">Mensagem enviada. Falamos em breve.</p>
+              ) : (
+                <form onSubmit={onSubmit} className="flex flex-col gap-4">
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <label className="block">
+                      <span className="mb-1.5 block text-[12px] font-medium text-gray-600">Nome</span>
+                      <input
+                        type="text"
+                        name="name"
+                        value={name}
+                        onChange={(event) => setName(event.target.value)}
+                        required
+                        className={FIELD}
+                      />
+                    </label>
+
+                    <label className="block">
+                      <span className="mb-1.5 block text-[12px] font-medium text-gray-600">E-mail</span>
+                      <input
+                        type="email"
+                        name="email"
+                        value={email}
+                        onChange={(event) => setEmail(event.target.value)}
+                        required
+                        className={FIELD}
+                      />
+                    </label>
+                  </div>
+
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <label className="block">
+                      <span className="mb-1.5 block text-[12px] font-medium text-gray-600">Empresa</span>
+                      <input
+                        type="text"
+                        name="company"
+                        value={company}
+                        onChange={(event) => setCompany(event.target.value)}
+                        required
+                        className={FIELD}
+                      />
+                    </label>
+
+                    <label className="block">
+                      <span className="mb-1.5 block text-[12px] font-medium text-gray-600">
+                        Serviço de interesse
+                      </span>
+                      <select
+                        name="service"
+                        value={service}
+                        onChange={(event) => setService(event.target.value)}
+                        required
+                        className={SELECT}
+                      >
+                        <option value="" disabled>
+                          Selecione
+                        </option>
+                        {SERVICES.map((item) => (
+                          <option key={item} value={item}>
+                            {item}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                  </div>
+
+                  <label className="block">
+                    <span className="mb-1.5 block text-[12px] font-medium text-gray-600">
+                      Investimento mensal estimado
+                    </span>
+                    <select
+                      name="budget"
+                      value={budget}
+                      onChange={(event) => setBudget(event.target.value)}
+                      required
+                      className={SELECT}
+                    >
+                      <option value="" disabled>
+                        Selecione
+                      </option>
+                      {BUDGETS.map((item) => (
+                        <option key={item} value={item}>
+                          {item}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+
+                  <label className="block">
+                    <span className="mb-1.5 block text-[12px] font-medium text-gray-600">Mensagem</span>
+                    <textarea
+                      name="message"
+                      rows={4}
+                      value={message}
+                      onChange={(event) => setMessage(event.target.value)}
+                      placeholder="Conte sobre o desafio da sua marca"
+                      className="w-full rounded-2xl border border-gray-200 px-5 py-3 text-[14px] outline-none transition-colors duration-300 focus:border-gray-900"
+                    />
+                  </label>
+
+                  <label className="flex items-start gap-2 text-[12px] text-gray-600">
+                    <input type="checkbox" name="privacy" required className="mt-0.5 shrink-0" />
+                    <span>
+                      Concordo com o tratamento dos meus dados conforme a{' '}
+                      <a href="#/privacidade" className="underline">
+                        Política de Privacidade
+                      </a>
+                      .
+                    </span>
+                  </label>
+
+                  {status === 'error' && (
+                    <p className="text-[12px] text-red-600">
+                      Não foi possível enviar. Fale pelo WhatsApp ou por e-mail.
+                    </p>
+                  )}
+
+                  <button
+                    type="submit"
+                    disabled={status === 'sending'}
+                    className="group flex items-center gap-3 self-start rounded-full bg-[#F26522] py-2 pl-5 pr-2 text-[13px] font-medium text-white transition-colors duration-300 hover:bg-[#e05a1a] disabled:opacity-60 sm:pl-6 sm:text-[14px]"
+                  >
+                    <TextRoll>{status === 'sending' ? 'Enviando…' : 'Enviar mensagem'}</TextRoll>
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white sm:h-8 sm:w-8">
+                      <ArrowRight
+                        size={14}
+                        strokeWidth={1.75}
+                        className="text-[#F26522] transition-transform duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:-rotate-45"
+                      />
+                    </span>
+                  </button>
+                </form>
+              )}
+            </div>
+          </Reveal>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+
+--- FILE: src/components/ShaderBackdrop.tsx ---
+import { useEffect, useRef, useState } from 'react'
+import { ChromaFlow, FilmGrain, FlutedGlass, Shader, Swirl } from 'shaders/react'
+
+export function ShaderBackdrop() {
+  const [unavailable, setUnavailable] = useState(false)
+  const [visible, setVisible] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const element = ref.current
+    if (!element) return
+
+    const observer = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting), {
+      rootMargin: '200px',
+    })
+
+    observer.observe(element)
+    return () => observer.disconnect()
+  }, [])
+
+  return (
+    <div ref={ref} className="pointer-events-none absolute inset-0 z-10 h-full w-full">
+      {unavailable && (
+        <div
+          aria-hidden="true"
+          className="shader-fallback pointer-events-none absolute inset-0 z-10"
+        />
+      )}
+
+      {visible && (
+        <Shader
+          className="pointer-events-none absolute inset-0 z-10 h-full w-full"
+          onUnavailable={() => setUnavailable(true)}
+        >
+          <Swirl colorA="#ffffff" colorB="#f0f0f0" detail={1.7} />
+          <ChromaFlow
+            baseColor="#ffffff"
+            downColor="#ff5f03"
+            leftColor="#ff5f03"
+            rightColor="#ff5f03"
+            upColor="#ff5f03"
+            momentum={13}
+            radius={3.5}
+          />
+          <FlutedGlass
+            aberration={0.61}
+            angle={31}
+            frequency={8}
+            highlight={0.12}
+            highlightSoftness={0}
+            lightAngle={-90}
+            refraction={4}
+            shape="rounded"
+            softness={1}
+            speed={0.15}
+          />
+          <FilmGrain strength={0.05} />
+        </Shader>
+      )}
+    </div>
+  )
+}
+
+
+--- FILE: src/components/Testimonials.tsx ---
+import { Reveal } from './Reveal'
+import { SectionBadge } from './SectionBadge'
+
+const STATS = [
+  { value: '120+', label: 'campanhas no ar' },
+  { value: '35 mi', label: 'pessoas impactadas' },
+  { value: '18', label: 'prêmios e menções' },
+  { value: '8 anos', label: 'de agência' },
+]
+
+const TESTIMONIALS = [
+  {
+    quote:
+      'A Vetor entendeu a nossa marca antes de escrever a primeira linha. A campanha dobrou o fluxo nas lojas em dois meses.',
+    name: 'Marina Duarte',
+    role: 'CMO · Aurora Café',
+    initials: 'MD',
+  },
+  {
+    quote:
+      'Processo transparente, prazos cumpridos e uma criatividade que nenhuma outra agência nos entregou.',
+    name: 'Rafael Nogueira',
+    role: 'CEO · Solenne',
+    initials: 'RN',
+  },
+  {
+    quote:
+      'Em seis semanas lançamos uma campanha 360 que reposicionou o produto. O time conduz tudo com muita clareza.',
+    name: 'Camila Torres',
+    role: 'Head de Marketing · Orbital',
+    initials: 'CT',
+  },
+  {
+    quote:
+      'Raramente vi uma agência unir criatividade e dados tão bem. Cada real de mídia foi acompanhado e otimizado.',
+    name: 'Bruno Katsuragi',
+    role: 'CMO · Fluxa',
+    initials: 'BK',
+  },
+  {
+    quote:
+      'Nos ajudaram a repensar o posicionamento inteiro. As vendas cresceram 60% no semestre.',
+    name: 'Helena Prado',
+    role: 'Fundadora · Casa Alba',
+    initials: 'HP',
+  },
+  {
+    quote: 'Comunicação direta, sem enrolação, e um resultado final acima do que imaginávamos.',
+    name: 'Diego Menezes',
+    role: 'Diretor Comercial · Vertix',
+    initials: 'DM',
+  },
+]
+
+type Testimonial = (typeof TESTIMONIALS)[number]
+
+function TestimonialCard({ item }: { item: Testimonial }) {
+  return (
+    <article className="flex min-h-[260px] w-[300px] shrink-0 cursor-default flex-col justify-between rounded-2xl bg-white p-6 sm:w-[400px] sm:p-8">
+      <p className="text-[18px] font-medium leading-[1.35] tracking-[-0.01em] text-gray-900 sm:text-[22px]">
+        {item.quote}
+      </p>
+      <div className="mt-8 flex items-center gap-3">
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gray-900 text-[12px] font-semibold text-white">
+          {item.initials}
+        </span>
+        <div>
+          <p className="text-[14px] font-semibold text-gray-900">{item.name}</p>
+          <p className="text-[13px] text-gray-600">{item.role}</p>
+        </div>
+      </div>
+    </article>
+  )
+}
+
+export function Testimonials() {
+  return (
+    <section
+      id="depoimentos"
+      className="bg-[#F5F5F5] pb-16 pt-16 sm:pb-20 sm:pt-20 lg:pb-28 lg:pt-28"
+    >
+      <div className="mx-auto w-full max-w-[1440px]">
+        <div className="px-5 sm:px-8 lg:px-12">
+          <SectionBadge
+            number="5"
+            label="Resultados e depoimentos"
+            borderClassName="border-gray-300"
+          />
+        </div>
+
+        <div className="mb-12 grid grid-cols-2 gap-6 px-5 sm:mb-16 sm:px-8 lg:grid-cols-4 lg:px-12">
+          {STATS.map((stat, index) => (
+            <Reveal key={stat.label} delay={index * 80}>
+              <div>
+                <p className="text-[clamp(2rem,5vw,3.5rem)] font-medium leading-none tracking-[-0.03em] text-gray-900">
+                  {stat.value}
+                </p>
+                <p className="mt-2 text-[13px] text-gray-600 sm:text-[14px]">{stat.label}</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+
+      <Reveal>
+        <div className="marquee marquee-mask overflow-hidden">
+          <div className="marquee-track gap-5 pr-5 sm:gap-6 sm:pr-6">
+            {TESTIMONIALS.map((item) => (
+              <TestimonialCard key={item.initials} item={item} />
+            ))}
+            <div aria-hidden="true" className="contents">
+              {TESTIMONIALS.map((item) => (
+                <TestimonialCard key={`${item.initials}-dup`} item={item} />
+              ))}
+            </div>
+          </div>
+        </div>
+      </Reveal>
+    </section>
+  )
+}
+
+
+--- FILE: src/components/About.tsx ---
+import { ArrowRight } from 'lucide-react'
+import { Reveal } from './Reveal'
+import { SectionBadge } from './SectionBadge'
+import { TextRoll } from './TextRoll'
+
+const SEGMENTS = [
+  'Varejo',
+  'Alimentos e bebidas',
+  'Saúde e bem-estar',
+  'Educação',
+  'Tecnologia',
+  'Serviços',
+]
+
+const DIFFERENTIALS = [
+  {
+    number: '01',
+    title: 'Estratégia antes da estética',
+    description:
+      'Todo conceito criativo nasce de um objetivo de negócio e de um público bem definido.',
+  },
+  {
+    number: '02',
+    title: 'Criação e mídia no mesmo time',
+    description:
+      'Quem cria a ideia acompanha a veiculação, o que evita ruídos e acelera os ajustes.',
+  },
+  {
+    number: '03',
+    title: 'Resultado medido, não presumido',
+    description:
+      'Metas e KPIs combinados no briefing, com relatórios claros durante toda a campanha.',
+  },
+]
+
+function AboutButton() {
+  return (
+    <a
+      href="#servicos"
+      className="group inline-flex items-center gap-3 rounded-full bg-[#F26522] py-2 pl-5 pr-2 text-[13px] font-medium text-white transition-colors duration-300 hover:bg-[#e05a1a] sm:pl-6 sm:text-[14px]"
+    >
+      <TextRoll>Ver nossos serviços</TextRoll>
+      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white sm:h-8 sm:w-8">
+        <ArrowRight
+          size={14}
+          strokeWidth={1.75}
+          className="text-[#F26522] transition-transform duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:-rotate-45"
+        />
+      </span>
+    </a>
+  )
+}
+
+export function About() {
+  return (
+    <section id="studio" className="overflow-hidden bg-white pb-12 pt-16 sm:pb-16 sm:pt-20 lg:pb-24 lg:pt-32">
+      <div className="mx-auto w-full max-w-[1440px] px-5 sm:px-8 lg:px-12">
+        <SectionBadge number="1" label="Conheça a Vetor" />
+
+        <Reveal variant="blur">
+          <h2 className="mb-12 text-[clamp(1.5rem,4vw,3.2rem)] font-medium leading-[1.12] tracking-[-0.02em] text-gray-900 sm:mb-16 lg:mb-20">
+            Ideia, mídia e resultado,
+            <br className="hidden sm:block" />
+            <span className="sm:hidden"> </span>
+            todos na mesma direção.
+          </h2>
+        </Reveal>
+
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-20">
+          <Reveal variant="left" className="min-w-0">
+            <p className="max-w-[520px] text-[16px] font-medium leading-[1.65] text-gray-900 sm:text-[18px]">
+              A Vetor une estratégia, criação e mídia em um só time. Cada campanha parte de um objetivo de negócio claro e é medida por ele.
+            </p>
+            <div className="mt-8">
+              <AboutButton />
+            </div>
+            <div className="mt-10 sm:mt-12">
+              <p className="mb-3 text-[13px] text-gray-600">Segmentos que atendemos</p>
+              <div className="flex flex-wrap gap-2">
+                {SEGMENTS.map((segment) => (
+                  <span
+                    key={segment}
+                    className="rounded-full border border-gray-200 px-3 py-1 text-[12px] font-medium text-gray-900 transition-colors duration-300 hover:border-gray-900 hover:bg-gray-900 hover:text-white sm:px-4 sm:py-1.5 sm:text-[13px]"
+                  >
+                    {segment}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </Reveal>
+
+          <div className="min-w-0">
+            {DIFFERENTIALS.map((item, index) => (
+              <Reveal key={item.number} delay={index * 80}>
+                <div
+                  className={`group flex gap-5 border-t border-gray-200 py-6 sm:py-7${
+                    index === DIFFERENTIALS.length - 1 ? ' border-b' : ''
+                  }`}
+                >
+                  <span className="w-8 shrink-0 text-[13px] text-gray-600 transition-colors duration-500 group-hover:text-[#F26522]">
+                    {item.number}
+                  </span>
+                  <div className="min-w-0">
+                    <h3 className="text-[18px] font-medium tracking-[-0.01em] text-gray-900 sm:text-[20px]">
+                      {item.title}
+                    </h3>
+                    <p className="mt-2 max-w-[440px] text-[14px] leading-relaxed text-gray-600">
+                      {item.description}
+                    </p>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+
+--- FILE: src/components/TextRoll.tsx ---
+type TextRollProps = {
+  children: string
+  className?: string
+}
+
+export function TextRoll({ children, className = '' }: TextRollProps) {
+  return (
+    <span className={`relative block h-[20px] overflow-hidden ${className}`}>
+      <span className="flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:-translate-y-1/2">
+        <span className="block h-[20px] whitespace-nowrap leading-[20px]">{children}</span>
+        <span className="block h-[20px] whitespace-nowrap leading-[20px]">{children}</span>
+      </span>
+    </span>
+  )
+}
+
+
+--- FILE: src/components/CaseStudies.tsx ---
+import { ArrowRight } from 'lucide-react'
+import { LazyVideo } from './LazyVideo'
+import { Reveal } from './Reveal'
+import { SectionBadge } from './SectionBadge'
+
+const NUVIA_VIDEO =
+  'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260516_122702_390f5305-8719-41d5-ae80-d23ab3796c28.mp4'
+
+const SOLENNE_VIDEO =
+  'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260516_123323_f909c2b8-ff6c-4edf-882b-8ebcdbe389b5.mp4'
+
+export function CaseStudies() {
+  return (
+    <section id="work" className="bg-[#F5F5F5] pb-16 pt-16 sm:pb-20 sm:pt-20 lg:pb-28 lg:pt-28">
+      <div className="mx-auto w-full max-w-[1440px]">
+        <div className="px-5 sm:px-8 lg:px-12">
+          <SectionBadge number="2" label="Campanhas em destaque" borderClassName="border-gray-300" />
+
+          <Reveal variant="blur">
+            <h2 className="mb-10 text-[clamp(1.75rem,7vw,4.2rem)] font-medium leading-[1.08] tracking-[-0.03em] text-gray-900 sm:mb-14 sm:text-[clamp(2.5rem,5vw,4.2rem)] lg:mb-16">
+              Nossas campanhas
+            </h2>
+          </Reveal>
+        </div>
+
+        <div className="grid grid-cols-1 gap-5 px-5 sm:gap-6 sm:px-8 md:grid-cols-2 lg:gap-7 lg:px-12">
+          <Reveal variant="scale" delay={0}>
+          <article>
+            <div
+              className="group relative cursor-pointer overflow-hidden rounded-2xl bg-[#1a1d2e]"
+              style={{ aspectRatio: '329 / 246' }}
+            >
+              <LazyVideo src={NUVIA_VIDEO} className="h-full w-full object-cover" />
+
+              <a
+                href="#connect"
+                aria-label="Quero uma campanha como a da Aurora Café"
+                className="absolute bottom-4 left-4 h-9 w-9 overflow-hidden rounded-full bg-white transition-all duration-300 ease-in-out group-hover:w-[156px]"
+              >
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 whitespace-nowrap text-[13px] font-medium text-gray-900 opacity-0 transition-opacity delay-100 duration-300 group-hover:opacity-100">
+                  Quero algo assim
+                </span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                  className="absolute right-[11px] top-1/2 h-3.5 w-3.5 -translate-y-1/2 -rotate-45 text-gray-900 transition-transform duration-300 group-hover:rotate-0"
+                >
+                  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                </svg>
+              </a>
+            </div>
+
+            <p className="mt-4 text-[13px] leading-relaxed text-gray-600 sm:text-[14px]">
+              Campanha premiada que transformou o lançamento do café em assunto nas redes e nas lojas.
+            </p>
+            <h3 className="mt-1 text-[14px] font-semibold text-gray-900 sm:text-[15px]">Aurora Café</h3>
+            <div className="mt-3 flex flex-wrap items-center gap-2">
+              <span className="rounded-full border border-gray-300 px-3 py-1 text-[12px] font-medium text-gray-900">
+                Alimentos e bebidas
+              </span>
+              <span className="text-[13px] text-gray-600">Conceito, filme e mídia integrada</span>
+            </div>
+            <p className="mt-2 text-[13px] text-gray-900 sm:text-[14px]">
+              Resultado: <strong className="font-semibold">3 mi de pessoas alcançadas em 30 dias</strong>
+            </p>
+          </article>
+          </Reveal>
+
+          <Reveal variant="scale" delay={80}>
+          <article>
+            <div
+              className="group relative aspect-square cursor-pointer overflow-hidden rounded-2xl bg-[#6b6b6b]"
+            >
+              <LazyVideo src={SOLENNE_VIDEO} className="h-full w-full object-cover" />
+
+              <a
+                href="#connect"
+                aria-label="Quero uma campanha como a da Solenne"
+                className="absolute bottom-4 left-4 h-9 w-9 overflow-hidden rounded-full bg-gray-900 transition-all duration-300 ease-in-out group-hover:w-[156px]"
+              >
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 whitespace-nowrap text-[13px] font-medium text-white opacity-0 transition-opacity delay-100 duration-300 group-hover:opacity-100">
+                  Quero algo assim
+                </span>
+                <ArrowRight
+                  size={14}
+                  strokeWidth={1.75}
+                  className="absolute right-[11px] top-1/2 -translate-y-1/2 -rotate-45 text-white transition-transform duration-300 group-hover:rotate-0"
+                />
+              </a>
+            </div>
+
+            <p className="mt-4 text-[13px] leading-relaxed text-gray-600 sm:text-[14px]">
+              Uma campanha 360 que reposicionou a linha de produtos e reaproximou a marca do público.
+            </p>
+            <h3 className="mt-1 text-[14px] font-semibold text-gray-900 sm:text-[15px]">Solenne</h3>
+            <div className="mt-3 flex flex-wrap items-center gap-2">
+              <span className="rounded-full border border-gray-300 px-3 py-1 text-[12px] font-medium text-gray-900">
+                Saúde e bem-estar
+              </span>
+              <span className="text-[13px] text-gray-600">Reposicionamento e campanha 360</span>
+            </div>
+            <p className="mt-2 text-[13px] text-gray-900 sm:text-[14px]">
+              Resultado: <strong className="font-semibold">+27% de lembrança de marca</strong>
+            </p>
+          </article>
+          </Reveal>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+
+--- FILE: src/components/ScrollProgress.tsx ---
+import { useEffect, useRef } from 'react'
+
+export function ScrollProgress() {
+  const barRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const bar = barRef.current
+    if (!bar) return
+
+    const media = window.matchMedia('(prefers-reduced-motion: reduce)')
+    let frame = 0
+
+    const update = () => {
+      const doc = document.documentElement
+      const max = doc.scrollHeight - window.innerHeight
+      const progress = max > 0 ? window.scrollY / max : 0
+      bar.style.transform = `scaleX(${progress})`
+    }
+
+    const onScroll = () => {
+      if (media.matches) {
+        bar.style.transform = 'scaleX(0)'
+        return
+      }
+      if (frame) return
+      frame = window.requestAnimationFrame(() => {
+        frame = 0
+        update()
+      })
+    }
+
+    update()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll, { passive: true })
+
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+      if (frame) window.cancelAnimationFrame(frame)
+    }
+  }, [])
+
+  return (
+    <div
+      ref={barRef}
+      aria-hidden="true"
+      className="fixed left-0 top-0 z-[60] h-[3px] w-full origin-left bg-[#F26522]"
+      style={{ transform: 'scaleX(0)' }}
+    />
+  )
+}
+
+
+--- FILE: src/components/Journal.tsx ---
+import { ArrowUpRight } from 'lucide-react'
+import { POSTS } from '../data/posts'
+import { Reveal } from './Reveal'
+import { SectionBadge } from './SectionBadge'
+
+export function Journal() {
+  return (
+    <section id="journal" className="bg-white pb-16 pt-16 sm:pb-20 sm:pt-20 lg:pb-28 lg:pt-28">
+      <div className="mx-auto w-full max-w-[1440px]">
+        <div className="px-5 sm:px-8 lg:px-12">
+          <SectionBadge number="6" label="Blog" />
+
+          <Reveal variant="blur">
+            <h2 className="mb-10 text-[clamp(1.75rem,7vw,4.2rem)] font-medium leading-[1.08] tracking-[-0.03em] text-gray-900 sm:mb-14 sm:text-[clamp(2.5rem,5vw,4.2rem)] lg:mb-16">
+              Ideias e bastidores
+            </h2>
+          </Reveal>
+        </div>
+
+        <div className="grid grid-cols-1 gap-5 px-5 sm:gap-6 sm:px-8 md:grid-cols-3 lg:gap-7 lg:px-12">
+          {POSTS.map((post, index) => (
+            <Reveal key={post.title} delay={index * 80}>
+              <a
+                href={`#/blog/${post.slug}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group block"
+              >
+                <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
+                  <div
+                    className={`absolute inset-0 transition-transform duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:scale-105 ${post.gradient}`}
+                  />
+                  <span className="absolute left-4 top-4 z-10 rounded-full bg-white/90 px-3 py-1 text-[12px] font-medium text-gray-900">
+                    {post.category}
+                  </span>
+                </div>
+                <p className="mt-4 text-[13px] text-gray-600">{post.date}</p>
+                <h3 className="mt-1 text-[17px] font-medium leading-snug text-gray-900 sm:text-[18px]">
+                  {post.title}
+                </h3>
+                <span className="mt-3 inline-flex items-center gap-1 text-[13px] font-medium text-gray-900">
+                  Ler artigo
+                  <ArrowUpRight
+                    size={14}
+                    strokeWidth={1.75}
+                    className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                  />
+                </span>
+              </a>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+
+--- FILE: src/components/Navbar.tsx ---
+import { useEffect, useState } from 'react'
+import { ArrowRight, Clock, Menu, X } from 'lucide-react'
+import { TextRoll } from './TextRoll'
+
+const NAV_LINKS = [
+  { label: 'Campanhas', href: '#work' },
+  { label: 'Agência', href: '#studio' },
+  { label: 'Blog', href: '#journal' },
+  { label: 'Contato', href: '#connect' },
+]
+
+export function Navbar() {
+  const [open, setOpen] = useState(false)
+
+  useEffect(() => {
+    if (!open) return
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setOpen(false)
+    }
+
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    window.addEventListener('keydown', onKeyDown)
+
+    return () => {
+      document.body.style.overflow = previousOverflow
+      window.removeEventListener('keydown', onKeyDown)
+    }
+  }, [open])
+
+  return (
+    <>
+      <div className="relative z-20 mx-auto w-full max-w-[1440px] p-2 sm:p-3">
+        <nav className="flex items-center justify-between rounded-full bg-white p-[5px]">
+          <div className="flex items-center gap-4 pl-1 md:gap-6 lg:gap-8">
+            <a
+              href="#top"
+              aria-label="Página inicial da Vetor Agência"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gray-900 text-[10px] font-bold tracking-tight text-white sm:h-10 sm:w-10 sm:text-[11px]"
+            >
+              VT
+            </a>
+
+            <div className="hidden items-center gap-6 md:flex">
+              {NAV_LINKS.map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  className="text-[14px] text-gray-900 transition-colors duration-300 hover:text-gray-500"
+                >
+                  {link.label}
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <div className="hidden items-center gap-4 pr-0.5 md:flex lg:gap-5">
+            <span className="hidden text-[13px] text-gray-600 lg:block">
+              Agenda aberta para o 1º trimestre de 2027
+            </span>
+
+            <span className="flex items-center gap-1.5 whitespace-nowrap text-[13px] text-gray-600">
+              <Clock size={14} strokeWidth={1.75} />
+              Resposta em até 24h úteis
+            </span>
+
+            <a
+              href="#connect"
+              className="group flex items-center gap-3 rounded-full bg-gray-900 py-2 pl-5 pr-2 text-[13px] font-medium text-white"
+            >
+              <TextRoll>Iniciar um projeto</TextRoll>
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white">
+                <ArrowRight
+                  size={14}
+                  strokeWidth={1.75}
+                  className="text-gray-900 transition-transform duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:-rotate-45"
+                />
+              </span>
+            </a>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setOpen((value) => !value)}
+            aria-expanded={open}
+            aria-controls="mobile-menu"
+            className="flex items-center gap-1.5 rounded-full bg-gray-900 px-4 py-2 text-[13px] font-medium text-white md:hidden"
+          >
+            {open ? 'Fechar' : 'Menu'}
+            {open ? <X size={16} /> : <Menu size={16} />}
+          </button>
+        </nav>
+      </div>
+
+      <div
+        id="mobile-menu"
+        aria-hidden={!open}
+        className={`fixed inset-0 z-50 flex flex-col justify-end transition-opacity duration-500 ${
+          open ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
+        }`}
+      >
+        <button
+          type="button"
+          aria-label="Fechar menu"
+          tabIndex={open ? 0 : -1}
+          onClick={() => setOpen(false)}
+          className="absolute inset-0 bg-black/60"
+        />
+
+        <div
+          className={`relative z-10 mx-3 mb-3 rounded-2xl bg-white px-5 pb-5 pt-6 transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] sm:px-6 ${
+            open ? 'translate-y-0' : 'translate-y-full'
+          }`}
+        >
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-[12px] font-medium text-gray-600">
+            <Clock size={13} strokeWidth={1.75} />
+            {time} em São Paulo
+          </span>
+
+          <div className="mt-6 flex flex-col">
+            {NAV_LINKS.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                onClick={() => setOpen(false)}
+                tabIndex={open ? 0 : -1}
+                className="text-[28px] font-medium leading-[32px] text-gray-900 sm:text-[32px]"
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
+
+          <a
+            href="#connect"
+            onClick={() => setOpen(false)}
+            tabIndex={open ? 0 : -1}
+            className="group mt-8 flex w-full items-center justify-between rounded-full bg-[#F26522] py-2 pl-5 pr-2 text-[13px] font-medium text-white transition-colors duration-300 hover:bg-[#e05a1a] sm:text-[14px]"
+          >
+            <TextRoll>Iniciar um projeto</TextRoll>
+            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white sm:h-8 sm:w-8">
+              <ArrowRight
+                size={14}
+                strokeWidth={1.75}
+                className="text-[#F26522] transition-transform duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:-rotate-45"
+              />
+            </span>
+          </a>
+        </div>
+      </div>
+    </>
+  )
+}
+
+
+--- FILE: .monkeycode-tmp-files/8a2e09bf-long-input-20261017-042935.txt ---
+Build a React + Vite + Tailwind CSS landing page for "Axion Studio" - a design agency site. Use the `shaders` package (npm: `shaders`) for the hero background, `lucide-react` for icons. The page has 3 sections. Match every detail exactly:
+
+---
+
+## SECTION 1: HERO (Full viewport height)
+
+**Background:** Light gray `#EFEFEF` with a full-screen animated shader overlay (positioned absolute, inset-0, z-10, pointer-events-none). The shader stack uses components from `shaders/react`:
+- `Swirl` - colorA: `#ffffff`, colorB: `#f0f0f0`, detail: 1.7
+- `ChromaFlow` - baseColor: `#ffffff`, downColor/leftColor/rightColor/upColor: `#ff5f03`, momentum: 13, radius: 3.5
+- `FlutedGlass` - aberration: 0.61, angle: 31, frequency: 8, highlight: 0.12, highlightSoftness: 0, lightAngle: -90, refraction: 4, shape: "rounded", softness: 1, speed: 0.15
+- `FilmGrain` - strength: 0.05
+
+**Navigation (z-20, relative):** A pill-shaped white navbar (`bg-white rounded-full`) with 5px padding, inside a max-w-[1440px] container with p-2 sm:p-3.
+
+- LEFT: Dark circle logo (w-9 h-9 sm:w-10 sm:h-10, bg-gray-900, rounded-full) with white text "AX" (10px/11px, font-bold, tracking-tight). Next to it (hidden on mobile, shown md+): nav links "Projects", "Studio", "Journal", "Connect" - 14px, text-gray-900, hover:text-gray-500, transition-colors duration-300, gap-6.
+
+- RIGHT (hidden on mobile, shown md+): 
+  - Text "Taking on projects for Q1 2026" (13px, text-gray-600, hidden below lg)
+  - Clock icon (lucide, size 14) + live London time "{HH:MM} in London" (13px, text-gray-600)
+  - CTA button: bg-gray-900, text-white, 13px font-medium, rounded-full, pl-5 pr-2 py-2. Text "Book a strategy call" with a HOVER TEXT ROLL animation: the text is duplicated inside a flex-col container with overflow-hidden h-[20px], on group-hover it translates -50% vertically (duration-500, ease cubic-bezier(0.25,0.1,0.25,1)). Arrow icon in a white circle (w-6 h-6) that rotates -45deg on hover (same easing).
+
+- MOBILE: A "Menu"/"Close" toggle button (md:hidden), bg-gray-900, rounded-full, with Menu/X icons from lucide-react.
+
+**Mobile Menu Overlay:** Fixed inset-0, z-50. Black/60 backdrop. A white bottom sheet (rounded-2xl, mx-3 mb-3) that slides up (translate-y-full to translate-y-0, duration-500, ease cubic-bezier(0.32,0.72,0,1)). Contains: time badge, nav links (28px/32px font-medium), and a "Start a project" button with arrow.
+
+**Hero Content (z-20):** Positioned at the bottom of the viewport using flexbox (flex-1 spacer above). Max-w-[1440px], px-5 sm:px-8 lg:px-12, pb-14 sm:pb-16 lg:pb-20.
+
+- Small label: "Axion Studio" (13px/14px, text-gray-900, tracking-wide, mb-5 sm:mb-8)
+- Headline h1: "We craft digital experiences / for brands ready to dominate / their category online." - clamp(1.75rem,7vw,4.2rem) on mobile, clamp(2.5rem,5vw,4.2rem) on sm+. font-medium, leading-[1.08], tracking-[-0.03em], text-gray-900. Line breaks hidden on mobile (uses `<br className="hidden sm:block" />` with `<span className="sm:hidden"> </span>` fallback spaces).
+- CTA row (mt-8 sm:mt-12, flex-col sm:flex-row, gap-4 sm:gap-5):
+  - Orange button: bg-[#F26522], hover:bg-[#e05a1a], text-white, 13px/14px, rounded-full, pl-5 sm:pl-6 pr-2 py-2. Same text-roll hover animation for "Start a project". White circle (w-7 h-7 sm:w-8 sm:h-8) with orange ArrowRight that rotates -45deg on hover.
+  - Partner badge: White pill with subtle shadow (0_2px_8px_rgba(0,0,0,0.08)), hover shadow (0_4px_16px_rgba(0,0,0,0.12)), rounded-[4px]. Contains an inline SVG icon (the starburst/compass shape below, w-5 h-5 sm:w-6 sm:h-6, fill-current text-[#E8704E]), text "Certified Partner" (13px/14px font-medium), and a dark badge "Featured" (10px/11px, bg-gray-900, text-white, px-1.5 sm:px-2 py-0.5, rounded).
+
+**SVG Icon for partner badge:**
+```svg
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="m19.6 66.5 19.7-11 .3-1-.3-.5h-1l-3.3-.2-11.2-.3L14 53l-9.5-.5-2.4-.5L0 49l.2-1.5 2-1.3 2.9.2 6.3.5 9.5.6 6.9.4L38 49.1h1.6l.2-.7-.5-.4-.4-.4L29 41l-10.6-7-5.6-4.1-3-2-1.5-2-.6-4.2 2.7-3 3.7.3.9.2 3.7 2.9 8 6.1L37 36l1.5 1.2.6-.4.1-.3-.7-1.1L33 25l-6-10.4-2.7-4.3-.7-2.6c-.3-1-.4-2-.4-3l3-4.2L28 0l4.2.6L33.8 2l2.6 6 4.1 9.3L47 29.9l2 3.8 1 3.4.3 1h.7v-.5l.5-7.2 1-8.7 1-11.2.3-3.2 1.6-3.8 3-2L61 2.6l2 2.9-.3 1.8-1.1 7.7L59 27.1l-1.5 8.2h.9l1-1.1 4.1-5.4 6.9-8.6 3-3.5L77 13l2.3-1.8h4.3l3.1 4.7-1.4 4.9-4.4 5.6-3.7 4.7-5.3 7.1-3.2 5.7.3.4h.7l12-2.6 6.4-1.1 7.6-1.3 3.5 1.6.4 1.6-1.4 3.4-8.2 2-9.6 2-14.3 3.3-.2.1.2.3 6.4.6 2.8.2h6.8l12.6 1 3.3 2 1.9 2.7-.3 2-5.1 2.6-6.8-1.6-16-3.8-5.4-1.3h-.8v.4l4.6 4.5 8.3 7.5L89 80.1l.5 2.4-1.3 2-1.4-.2-9.2-7-3.6-3-8-6.8h-.5v.7l1.8 2.7 9.8 14.7.5 4.5-.7 1.4-2.6 1-2.7-.6-5.8-8-6-9-4.7-8.2-.5.4-2.9 30.2-1.3 1.5-3 1.2-2.5-2-1.4-3 1.4-6.2 1.6-8 1.3-6.4 1.2-7.9.7-2.6v-.2H49L43 72l-9 12.3-7.2 7.6-1.7.7-3-1.5.3-2.8L24 86l10-12.8 6-7.9 4-4.6-.1-.5h-.3L17.2 77.4l-4.7.6-2-2 .2-3 1-1 8-5.5Z"/></svg>
+```
+
+---
+
+## SECTION 2: ABOUT (White background)
+
+`bg-white`, pt-16 sm:pt-20 lg:pt-32, pb-12 sm:pb-16 lg:pb-24, overflow-hidden. Max-w-[1440px] container.
+
+**Badge row:** px-5 sm:px-8 lg:px-12, flex items-center gap-3, mb-6 sm:mb-8.
+- Numbered circle: w-6 h-6 sm:w-7 sm:h-7, rounded-full, bg-gray-900, text-white, 11px/12px font-semibold. Shows "1".
+- Pill label: "Introducing Axion" - 12px/13px, font-medium, border border-gray-200, rounded-full, px-3 sm:px-4 py-1 sm:py-1.5.
+
+**Heading h2:** "Strategy-led creatives, delivering / results in digital and beyond." - clamp(1.5rem,4vw,3.2rem), font-medium, leading-[1.12], tracking-[-0.02em], text-gray-900, mb-12 sm:mb-16 lg:mb-28.
+
+**Content area (responsive):**
+
+- MOBILE/TABLET (lg:hidden): Stacked - paragraph + button, then images.
+  - Paragraph: "Through research, creative thinking and iteration we help growing brands realize their digital full potential." - 15px/17px, leading-[1.6], font-medium, text-gray-900.
+  - Button: "About our studio" - orange (#F26522), same text-roll animation, white arrow circle rotates -45deg.
+  - Two images: flex-col sm:flex-row, gap-4 sm:gap-5. First: sm:w-[45%] aspect-[438/346]. Second: sm:w-[55%] aspect-[900/600]. Both rounded-xl sm:rounded-2xl, object-cover.
+
+- DESKTOP (hidden lg:grid): `grid-cols-[26%_1fr_48%] items-end gap-6 xl:gap-8`.
+  - Left column (self-end): Small image, aspect-[438/346], rounded-2xl.
+  - Center column (self-start, flex justify-end): Paragraph (16px/18px, leading-[1.65], whitespace-nowrap, with `<br/>` between lines) + orange button.
+  - Right column (self-end): Large image, aspect-[3/2], rounded-2xl.
+
+**Image URLs:**
+- Small image: `https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260516_090123_74be96d4-9c1b-40cf-932a-96f4f4babed3.png&w=1280&q=85`
+- Large image: `https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260516_090133_c157d30b-a99a-4477-bec1-a446149ec3f2.png&w=1280&q=85`
+
+---
+
+## SECTION 3: CASE STUDIES (Light gray background)
+
+`bg-[#F5F5F5]`, pt-16 sm:pt-20 lg:pt-28, pb-16 sm:pb-20 lg:pb-28. Max-w-[1440px] container.
+
+**Badge row:** Same pattern as Section 2, but number is "2", label is "Featured client work", border-gray-300.
+
+**Heading h2:** "Our projects" - same clamp sizing as hero headline (clamp(1.75rem,7vw,4.2rem) / clamp(2.5rem,5vw,4.2rem)), font-medium, leading-[1.08], tracking-[-0.03em], mb-10 sm:mb-14 lg:mb-16.
+
+**Cards Grid:** `grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 lg:gap-7`, px-5 sm:px-8 lg:px-12.
+
+**Card 1 (Narrativ):**
+- Video container: aspect-[329/246], rounded-2xl, overflow-hidden, bg-[#1a1d2e], group, cursor-pointer.
+- Video: `src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260516_122702_390f5305-8719-41d5-ae80-d23ab3796c28.mp4"`, autoPlay, muted, loop, playsInline, w-full h-full object-cover.
+- Hover button (absolute bottom-4 left-4): A white circle (h-9 w-9) that expands to w-[148px] on group-hover (transition-all duration-300 ease-in-out). Contains "Learn more" text (13px, font-medium, opacity-0 to opacity-100 on hover with delay-100) and a link/chain SVG icon (14x14, -rotate-45 to rotate-0 on hover). The SVG is the lucide "link" icon drawn manually with two arc paths.
+- Description: "Winner of Site of the Month 2025 - an interactive 3D showcase driving record engagement" - 13px/14px, text-gray-600, mt-4, leading-relaxed.
+- Title: "Narrativ" - 14px/15px, font-semibold, text-gray-900, mt-1.
+
+**Card 2 (Luminar):**
+- Video container: aspect-square, rounded-2xl, overflow-hidden, bg-[#6b6b6b], group, cursor-pointer.
+- Video: `src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260516_123323_f909c2b8-ff6c-4edf-882b-8ebcdbe389b5.mp4"`, autoPlay, muted, loop, playsInline, w-full h-full object-cover.
+- Hover button (absolute bottom-4 left-4): A DARK circle (bg-gray-900, h-9 w-9) that expands to w-[168px] on group-hover. Contains "View case study" text (13px, font-medium, text-white) and a white ArrowRight icon (size 14) that transitions from -rotate-45 to rotate-0 on hover.
+- Description: "Transforming a dated platform into a conversion-focused brand experience" - 13px/14px, text-gray-600, mt-4, leading-relaxed.
+- Title: "Luminar" - 14px/15px, font-semibold, text-gray-900, mt-1.
+
+---
+
+## GLOBAL STYLES (index.css):
+
+Standard Tailwind directives plus two utility classes (not actively used in current layout but defined):
+- `.liquid-glass`: rgba(255,255,255,0.01) bg, backdrop-filter blur(4px), inset box-shadow, pseudo-element gradient border using mask-composite.
+- `.liquid-glass-strong`: Same but blur(50px), no pseudo-element.
+
+---
+
+## TECHNICAL DETAILS:
+- **Framework:** React 18 + TypeScript + Vite
+- **Styling:** Tailwind CSS 3.4 (default config, no custom theme extensions)
+- **Packages:** `shaders` (for Shader, ChromaFlow, FilmGrain, FlutedGlass, Swirl from `shaders/react`), `lucide-react` (ArrowRight, Clock, Menu, X)
+- **Font:** System default (no custom font loaded)
+- **All animations use:** `duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)]` unless noted otherwise
+- **Max content width:** 1440px, centered with mx-auto
+- **Responsive breakpoints:** Default Tailwind (sm: 640px, md: 768px, lg: 1024px, xl: 1280px)
+- **Live clock:** Updates every second, shows London timezone in HH:MM format
+
+--- FILE: .monkeycode-tmp-files/5e0689f3-cidev_escuro-1.png [BINARY OR UNREADABLE] ---
+
